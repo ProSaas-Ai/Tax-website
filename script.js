@@ -5,9 +5,11 @@
 
 "use strict";
 
-// ---- Webhook URLs ----
-const WEBHOOK_HIGH = "PASTE_HIGH";
-const WEBHOOK_LOW  = "PASTE_LOW";
+// ---- Webhook URLs & Secrets ----
+const WEBHOOK_HIGH        = "https://prosaas.pro/api/webhook/leads/7";
+const WEBHOOK_HIGH_SECRET = "wh_c56bNZmrou9srMqfqRxttZQzyi_CQ2NrYEWmz-54Bgk";
+const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/6";
+const WEBHOOK_LOW_SECRET  = "wh_RqCEekRLnRDcYvzmMh9EpR6m6r51oym7g7a8gWDates";
 
 // ---- Questions ----
 const QUESTIONS = [
@@ -88,14 +90,14 @@ function calcScore() {
   return score;
 }
 
-// ---- Determine Webhook & lead status ----
+// ---- Determine Webhook ----
 // HIGH  → customer answered YES to Q1 (salary_over_8000) OR Q2 (private_insurance), or both
 // LOW   → customer answered NO to BOTH Q1 and Q2 (regardless of all other answers)
 function getWebhookConfig() {
   if (answers.salary_over_8000 || answers.private_insurance) {
-    return { webhookUrl: WEBHOOK_HIGH, lead_status: "מנגל" };
+    return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
   }
-  return { webhookUrl: WEBHOOK_LOW, lead_status: "שבור" };
+  return { webhookUrl: WEBHOOK_LOW, secret: WEBHOOK_LOW_SECRET };
 }
 
 // ---- Render question ----
@@ -257,29 +259,26 @@ leadForm.addEventListener("submit", async (e) => {
   const name  = document.getElementById("field-name").value.trim();
   const phone = document.getElementById("field-phone").value.trim().replace(/[-\s]/g, "");
   const score = calcScore();
-  const { webhookUrl, lead_status } = getWebhookConfig();
+  const { webhookUrl, secret } = getWebhookConfig();
 
   const payload = {
     name,
     phone,
     answers,
     score,
-    lead_status,
     consent: true,
     timestamp: new Date().toISOString(),
   };
 
   try {
-    if (webhookUrl && webhookUrl !== "PASTE_HIGH" && webhookUrl !== "PASTE_LOW") {
-      await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-    } else {
-      // Dev mode – log instead of sending
-      console.log("[Webhook payload – dev mode]", payload);
-    }
+    await fetch(webhookUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${secret}`,
+      },
+      body: JSON.stringify(payload),
+    });
   } catch (err) {
     console.error("Webhook error:", err);
     // Show thank you regardless – don't block the user
