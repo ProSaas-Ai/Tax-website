@@ -1000,6 +1000,13 @@ body.a11y-no-anim *::after {
     max-width: 100%;
     margin: 0 auto;
   }
+  .stat-num { font-size: 1.3rem; }
+}
+
+/* ≤768px: hero stats switch to 1 column to avoid cramping */
+@media (max-width: 768px) {
+  .hero-stats { grid-template-columns: 1fr; max-width: 320px; }
+  .stat-num   { font-size: 1.5rem; }
 }
 
 /* ============================================================
