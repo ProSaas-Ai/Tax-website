@@ -209,15 +209,15 @@ btnBack.addEventListener("click", () => {
 // ---- Form Validation ----
 function validateForm() {
   let valid = true;
-  const nameInput  = document.getElementById("field-name");
-  const phoneInput = document.getElementById("field-phone");
-  const consentBox = document.getElementById("consent-checkbox");
+  const nameInput       = document.getElementById("field-name");
+  const phoneInput      = document.getElementById("field-phone");
+  const consentCheckbox = document.getElementById("consent-checkbox");
 
   // Reset errors
   document.getElementById("name-error").textContent    = "";
   document.getElementById("phone-error").textContent   = "";
   document.getElementById("consent-error").textContent = "";
-  [nameInput, phoneInput].forEach((el) => el.classList.remove("error"));
+  [nameInput, phoneInput, consentCheckbox].forEach((el) => el.classList.remove("error"));
 
   // Name
   const nameVal = nameInput.value.trim();
@@ -244,8 +244,9 @@ function validateForm() {
   }
 
   // Consent checkbox – must be checked
-  if (!consentBox.checked) {
+  if (!consentCheckbox.checked) {
     document.getElementById("consent-error").textContent = "יש לאשר את ההצהרה לפני השליחה";
+    consentCheckbox.classList.add("error");
     valid = false;
   }
 
