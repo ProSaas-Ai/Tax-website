@@ -89,9 +89,10 @@ function calcScore() {
 }
 
 // ---- Determine Webhook & lead status ----
+// HIGH  → customer answered YES to Q1 (salary_over_8000) OR Q2 (private_insurance), or both
+// LOW   → customer answered NO to BOTH Q1 and Q2 (regardless of all other answers)
 function getWebhookConfig() {
-  const score = calcScore();
-  if (answers.salary_over_8000 && score >= 5) {
+  if (answers.salary_over_8000 || answers.private_insurance) {
     return { webhookUrl: WEBHOOK_HIGH, lead_status: "מנגל" };
   }
   return { webhookUrl: WEBHOOK_LOW, lead_status: "שבור" };
