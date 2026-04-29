@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="המרכז הארצי לזכויות מס – גלו האם מגיע לכם החזר מס מהמדינה. בדיקה חינם, ללא התחייבות." />
+  <title>המרכז הארצי לזכויות מס – בדיקת זכאות להחזר מס</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Heebo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== ACCESSIBILITY WIDGET ===== -->
+  <div id="a11y-panel" class="a11y-panel" role="dialog" aria-label="אפשרויות נגישות" aria-hidden="true">
+    <h3 class="a11y-title">הגדרות נגישות</h3>
+    <div class="a11y-options">
+      <button class="a11y-option-btn" id="a11y-increase-text" aria-label="הגדל טקסט">
+        <span class="a11y-icon">A+</span>
+        <span>הגדל טקסט</span>
+      </button>
+      <button class="a11y-option-btn" id="a11y-decrease-text" aria-label="הקטן טקסט">
+        <span class="a11y-icon">A-</span>
+        <span>הקטן טקסט</span>
+      </button>
+      <button class="a11y-option-btn" id="a11y-contrast" aria-label="ניגודיות גבוהה">
+        <span class="a11y-icon">◑</span>
+        <span>ניגודיות גבוהה</span>
+      </button>
+      <button class="a11y-option-btn" id="a11y-links" aria-label="הדגשת קישורים">
+        <span class="a11y-icon">🔗</span>
+        <span>הדגש קישורים</span>
+      </button>
+      <button class="a11y-option-btn" id="a11y-animations" aria-label="עצור אנימציות">
+        <span class="a11y-icon">⏸</span>
+        <span>עצור אנימציות</span>
+      </button>
+      <button class="a11y-option-btn a11y-reset" id="a11y-reset" aria-label="איפוס הגדרות">
+        <span class="a11y-icon">↺</span>
+        <span>איפוס</span>
+      </button>
+    </div>
+  </div>
+  <button id="a11y-toggle" class="a11y-fab" aria-label="פתח תפריט נגישות" aria-expanded="false" aria-controls="a11y-panel">
+    <span aria-hidden="true">♿</span>
+    <span class="a11y-fab-label">נגישות</span>
+  </button>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="logo-group">
+        <div class="logo-icon" aria-hidden="true">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 2L4 9v9c0 8.28 5.96 16.02 14 18 8.04-1.98 14-9.72 14-18V9L18 2z" fill="#0057A8"/>
+            <path d="M14 17l3 3 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">המרכז הארצי</span>
+          <span class="logo-sub">לזכויות מס</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="header-badge">בדיקה חינם</span>
+        <a href="#questionnaire" class="btn btn-primary header-cta" aria-label="התחל בדיקת זכאות חינם">התחל בדיקה</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-section" aria-labelledby="hero-title">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">🏛 שירות ממשלתי מוכר | ניסיון של שנים</div>
+        <h1 id="hero-title" class="hero-title">
+          גלו בחינם האם מגיע לכם<br />
+          <span class="highlight">החזר מס מהמדינה</span>
+        </h1>
+        <p class="hero-subtitle">
+          ענו על מספר שאלות קצרות וקבלו בדיקת זכאות ראשונית ללא התחייבות
+        </p>
+        <ul class="hero-bullets" role="list">
+          <li><span class="bullet-check" aria-hidden="true">✔</span> בדיקה חינם לחלוטין</li>
+          <li><span class="bullet-check" aria-hidden="true">✔</span> ללא התחייבות</li>
+          <li><span class="bullet-check" aria-hidden="true">✔</span> תהליך מהיר ופשוט</li>
+          <li><span class="bullet-check" aria-hidden="true">✔</span> טיפול מקצועי ואישי</li>
+        </ul>
+        <a href="#questionnaire" class="btn btn-primary btn-hero" aria-label="לחץ לבדיקת זכאות חינם">
+          בדקו את הזכאות שלכם – חינם!
+          <span class="btn-arrow" aria-hidden="true">←</span>
+        </a>
+        <p class="hero-disclaimer">
+          * המרכז הארצי לזכויות מס הוא גוף פרטי. השירות ניתן כחוק ובשיתוף הגופים הרלוונטיים בהתאם לצורך.
+        </p>
+      </div>
+      <div class="hero-stats" aria-label="נתונים סטטיסטיים">
+        <div class="stat-card">
+          <div class="stat-num">₪8,436</div>
+          <div class="stat-desc">ממוצע החזר לשכיר</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">80%</div>
+          <div class="stat-desc">מהשכירים זכאים</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3.6B₪</div>
+          <div class="stat-desc">מיסים עודפים לא נוצלו</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== QUESTIONNAIRE ===== -->
+  <section id="questionnaire" class="questionnaire-section" aria-labelledby="quiz-heading">
+    <div class="container">
+      <div class="quiz-wrapper" role="main">
+        <!-- Step: Questions -->
+        <div id="quiz-step" class="quiz-card">
+          <div class="quiz-header">
+            <div class="quiz-badge">
+              <span aria-hidden="true">📋</span> בדיקת זכאות להחזר מס
+            </div>
+            <h2 id="quiz-heading" class="quiz-title">שאלון זכאות</h2>
+            <div class="progress-bar-wrapper" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="8" aria-label="התקדמות השאלון" id="progress-bar-wrapper">
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+              </div>
+              <div class="progress-label" id="progress-label">שאלה 1 מתוך 8</div>
+            </div>
+          </div>
+
+          <div class="question-area" id="question-area">
+            <!-- Questions injected by JS -->
+          </div>
+
+          <div class="quiz-nav">
+            <button class="btn btn-outline btn-back" id="btn-back" aria-label="חזור לשאלה הקודמת" style="display:none;">
+              ← חזור
+            </button>
+          </div>
+        </div>
+
+        <!-- Step: Form -->
+        <div id="form-step" class="quiz-card" style="display:none;" aria-live="polite">
+          <div class="quiz-header">
+            <div class="quiz-badge success-badge">
+              <span aria-hidden="true">🎉</span> כמעט סיימנו!
+            </div>
+            <h2 class="quiz-title">מלאו את הפרטים לקבלת התוצאה</h2>
+            <p class="quiz-subtitle">הבדיקה בחינם ולא מחייבת אתכם בשום דבר</p>
+          </div>
+
+          <form id="lead-form" class="lead-form" novalidate aria-label="טופס פרטים לבדיקת זכאות">
+            <div class="form-group">
+              <label for="field-name" class="form-label">שם מלא <span class="required" aria-label="שדה חובה">*</span></label>
+              <input
+                type="text"
+                id="field-name"
+                name="name"
+                class="form-input"
+                placeholder="ישראל ישראלי"
+                required
+                autocomplete="name"
+                aria-required="true"
+                aria-describedby="name-error"
+              />
+              <span class="field-error" id="name-error" role="alert" aria-live="assertive"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="field-phone" class="form-label">טלפון נייד <span class="required" aria-label="שדה חובה">*</span></label>
+              <input
+                type="tel"
+                id="field-phone"
+                name="phone"
+                class="form-input"
+                placeholder="05X-XXXXXXX"
+                required
+                autocomplete="tel"
+                inputmode="numeric"
+                aria-required="true"
+                aria-describedby="phone-error"
+              />
+              <span class="field-error" id="phone-error" role="alert" aria-live="assertive"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="field-email" class="form-label">אימייל <span class="optional">(אופציונלי)</span></label>
+              <input
+                type="email"
+                id="field-email"
+                name="email"
+                class="form-input"
+                placeholder="israel@example.com"
+                autocomplete="email"
+                aria-describedby="email-error"
+              />
+              <span class="field-error" id="email-error" role="alert" aria-live="assertive"></span>
+            </div>
+
+            <div class="consent-group">
+              <label class="consent-label">
+                <input
+                  type="checkbox"
+                  id="consent-check"
+                  class="consent-checkbox"
+                  aria-required="true"
+                  aria-describedby="consent-error"
+                />
+                <span class="consent-text">
+                  אני מאשר/ת קבלת מידע ממוקד על זכויות המס שלי, ומסכים/ה
+                  <a href="#" class="consent-link">לתנאי השימוש</a>
+                  ולמדיניות הפרטיות.
+                  נציג ייצור עמי קשר לצורך הבדיקה.
+                </span>
+              </label>
+              <span class="field-error" id="consent-error" role="alert" aria-live="assertive"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit" id="btn-submit" aria-label="שלח טופס ובדוק זכאות">
+              <span id="btn-submit-text">בדקו זכאות עכשיו ←</span>
+              <span id="btn-submit-loading" style="display:none;" aria-live="assertive">שולח... ⏳</span>
+            </button>
+
+            <div class="form-trust-row" aria-label="אינדיקטורי אמינות">
+              <span class="trust-item"><span aria-hidden="true">🔒</span> מאובטח</span>
+              <span class="trust-item"><span aria-hidden="true">🛡</span> פרטיות מלאה</span>
+              <span class="trust-item"><span aria-hidden="true">⚡</span> מהיר ופשוט</span>
+            </div>
+          </form>
+        </div>
+
+        <!-- Step: Thank You -->
+        <div id="thankyou-step" class="quiz-card thankyou-card" style="display:none;" aria-live="polite">
+          <div class="thankyou-icon" aria-hidden="true">✅</div>
+          <h2 class="thankyou-title">הפנייה התקבלה בהצלחה!</h2>
+          <p class="thankyou-text">
+            נציג מקצועי מטעם המרכז הארצי לזכויות מס יחזור אליכם בהקדם<br />
+            לתיאום בדיקה ראשונית <strong>ללא עלות</strong>.
+          </p>
+          <div class="thankyou-info-box">
+            <span aria-hidden="true">📞</span>
+            <span>ממוצע זמן המתנה: עד 24 שעות</span>
+          </div>
+          <p class="thankyou-small">תודה שבחרתם במרכז הארצי לזכויות מס!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STATS SECTION ===== -->
+  <section class="stats-section" aria-labelledby="stats-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="stats-heading" class="section-title">שכירים? מגיע לכם בממוצע אלפי שקלים מהמדינה</h2>
+        <p class="section-subtitle">לפי דו"ח מבקר המדינה – מיסים עודפים שלא הוחזרו לאזרחים</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-big-card">
+          <div class="stat-big-icon" aria-hidden="true">💰</div>
+          <div class="stat-big-num">3.6 מיליארד ₪</div>
+          <div class="stat-big-desc">מיסים עודפים שנגבו מהאזרחים ולא הוחזרו</div>
+        </div>
+        <div class="stat-big-card">
+          <div class="stat-big-icon" aria-hidden="true">👥</div>
+          <div class="stat-big-num">8 מתוך 10</div>
+          <div class="stat-big-desc">שכירים זכאים להחזר מס שלא בדקו</div>
+        </div>
+        <div class="stat-big-card highlight-card">
+          <div class="stat-big-icon" aria-hidden="true">📊</div>
+          <div class="stat-big-num">₪8,436</div>
+          <div class="stat-big-desc">ממוצע ההחזר לשכיר בישראל</div>
+        </div>
+      </div>
+      <div class="stats-cta">
+        <a href="#questionnaire" class="btn btn-primary btn-large" aria-label="בדוק זכאות חינם">
+          הבדיקה בחינם! בואו נתחיל ←
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHAT YOU GET BACK ===== -->
+  <section class="refund-section" aria-labelledby="refund-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="refund-heading" class="section-title">על מה מגיע החזר מס?</h2>
+        <p class="section-subtitle">הזכויות שלכם – שאתם לא ידעתם שיש לכם</p>
+      </div>
+      <div class="refund-grid" role="list">
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">💼</span>
+          <span class="refund-label">שינוי מקום עבודה</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">🏦</span>
+          <span class="refund-label">קרן פנסיה ותגמולים</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">👶</span>
+          <span class="refund-label">לידה וחופשת לידה</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">🎓</span>
+          <span class="refund-label">תואר אקדמי</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">🏥</span>
+          <span class="refund-label">ביטוחי בריאות פרטיים</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">🏠</span>
+          <span class="refund-label">מס שבח ונדל"ן</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">📋</span>
+          <span class="refund-label">ביטוחים פרטיים</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">🎁</span>
+          <span class="refund-label">תרומות מוכרות</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">👶👶</span>
+          <span class="refund-label">נקודות זיכוי ילדים</span>
+        </div>
+        <div class="refund-item" role="listitem">
+          <span class="refund-icon" aria-hidden="true">📦</span>
+          <span class="refund-label">ועוד עשרות סעיפים</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY US ===== -->
+  <section class="why-section" aria-labelledby="why-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="why-heading" class="section-title">למה לבחור במרכז הארצי לזכויות מס?</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon" aria-hidden="true">🔍</div>
+          <h3 class="why-title">בדיקה של 70+ סעיפים</h3>
+          <p class="why-desc">אנחנו בודקים כל סעיף אפשרי – ולא מפספסים כלום</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon" aria-hidden="true">💻</div>
+          <h3 class="why-title">תהליך אונליין מלא</h3>
+          <p class="why-desc">ללא ביקורים, ללא ניירת – הכל דיגיטלי ונוח</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon" aria-hidden="true">💲</div>
+          <h3 class="why-title">דמי טיפול נמוכים</h3>
+          <p class="why-desc">רק 5%–10% מהסכום שיוחזר – ורק אחרי שתקבלו כסף</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon" aria-hidden="true">🤝</div>
+          <h3 class="why-title">ללא התחייבות</h3>
+          <p class="why-desc">הבדיקה חינם. תשלום רק אם יש תוצאה חיובית</p>
+        </div>
+      </div>
+
+      <!-- Bonuses -->
+      <div class="bonuses-section" aria-labelledby="bonuses-heading">
+        <h3 id="bonuses-heading" class="bonuses-title">בונוסים שתקבלו בחינם</h3>
+        <div class="bonuses-grid">
+          <div class="bonus-item">
+            <span class="bonus-icon" aria-hidden="true">🔎</span>
+            <div>
+              <strong>איתור כספים אבודים</strong>
+              <p>בדיקת כספים שהגיעו לכם ונשכחו</p>
+            </div>
+          </div>
+          <div class="bonus-item">
+            <span class="bonus-icon" aria-hidden="true">📈</span>
+            <div>
+              <strong>בדיקת פנסיה</strong>
+              <p>וידוא שהפנסיה שלכם מנוהלת כראוי</p>
+            </div>
+          </div>
+          <div class="bonus-item">
+            <span class="bonus-icon" aria-hidden="true">😌</span>
+            <div>
+              <strong>אפס התעסקות מצדכם</strong>
+              <p>אנחנו מטפלים בהכל מול רשות המיסים</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq-section" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="faq-heading" class="section-title">שאלות נפוצות</h2>
+        <p class="section-subtitle">תשובות לשאלות הנפוצות ביותר על החזרי מס</p>
+      </div>
+      <div class="faq-list" role="list">
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-1-answer">
+            <span>מהו החזר מס ומי זכאי לו?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-1-answer" hidden>
+            <p>החזר מס הוא כסף שגבתה ממך המדינה ביתר לאורך שנות עבודתך. כל עובד שכיר שניכוי המס שלו בוצע על ידי המעסיק עשוי להיות זכאי להחזר. זכאות שכיחה אצל מי שעבד אצל מספר מעסיקים, הכנסתו השתנתה, יש לו ילדים, ביצע שינויים בחייו ועוד.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-2-answer">
+            <span>עד כמה שנים אחורה אפשר לתבוע החזר?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-2-answer" hidden>
+            <p>ניתן לתבוע החזר מס עד 6 שנים אחורה. כלומר, כיום ניתן לתבוע עד שנת 2019. כל שנה שעוברת ניתן לאבד שנת החזר – לכן חשוב לפעול מהר.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-3-answer">
+            <span>האם הבדיקה באמת בחינם?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-3-answer" hidden>
+            <p>כן, לחלוטין. הבדיקה הראשונית אינה כרוכה בשום עלות. גם תהליך הגשת הבקשה מתבצע ללא תשלום מראש. אנחנו גובים עמלת הצלחה בלבד – רק אם וכאשר תקבלו כסף בחזרה.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-4-answer">
+            <span>כמה זמן לוקח התהליך?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-4-answer" hidden>
+            <p>בדרך כלל התהליך לוקח 2–4 חודשים מרגע הגשת הבקשה לרשות המיסים. במהלך הזמן הזה אנחנו מטפלים בכל הניירת ועדכונים שוטפים. אתם לא צריכים לעשות כלום.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-5-answer">
+            <span>אני עובד שכיר – האם גם אני זכאי?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-5-answer" hidden>
+            <p>כן! רוב ההחזרים ניתנים דווקא לשכירים. המעסיק מנכה מס לפי הערכה חודשית, אך בסוף השנה ייתכן שניכה יותר ממה שהיה צריך. בדיקת ה-6 שנים האחרונות יכולה לחשוף סכומים משמעותיים.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-6-answer">
+            <span>מה לגבי מי שעבד בכמה מקומות עבודה?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-6-answer" hidden>
+            <p>מי שעבד בשני מעסיקים או יותר באותה שנה – כמעט תמיד יש לו החזר. כל מעסיק מנכה מס בנפרד, מבלי לקחת בחשבון את המס שניכה המעסיק הקודם. זה יוצר כפל ניכויים שניתן לקבל בחזרה.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-7-answer">
+            <span>מה עם ביטוחי בריאות פרטיים?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-7-answer" hidden>
+            <p>פרמיות ביטוח חיים ובריאות מוכרות לצורכי מס. אם שילמתם על ביטוחים פרטיים, ייתכן שמגיע לכם זיכוי מס בגינם – עד 25% מהפרמיה שניתן לנצל.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-8-answer">
+            <span>האם יש סיכון שיגבו ממני כסף נוסף?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-8-answer" hidden>
+            <p>לא. בדיקת ההחזר מתבצעת על ידינו באופן מקדים ויסודי. אנחנו בודקים את הזכאות לפני הגשת הבקשה. אם הבדיקה מעלה שאין החזר – לא נגיש בקשה, ולא תשלמו כלום.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-9-answer">
+            <span>מה צריך לספק לצורך הבדיקה?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-9-answer" hidden>
+            <p>בשלב הראשון לא צריך כלום. לאחר שנציג ייצור קשר, נבקש תלושי שכר, טופסי 106 (שנתיים) ומסמכים רלוונטיים אחרים. אנחנו מסבירים הכל שלב אחר שלב.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" role="listitem">
+          <button class="faq-question" aria-expanded="false" aria-controls="faq-10-answer">
+            <span>מה עמלת ההצלחה שלכם?</span>
+            <span class="faq-arrow" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer" id="faq-10-answer" hidden>
+            <p>עמלת ההצלחה שלנו עומדת על 5%–10% בתוספת מע"מ מסכום ההחזר שיוחזר בפועל. זה נמוך מהממוצע בשוק. אין תשלום מראש, ואין עמלה אם לא קיבלתם החזר.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PRICING ===== -->
+  <section class="pricing-section" aria-labelledby="pricing-heading">
+    <div class="container">
+      <div class="pricing-card">
+        <div class="pricing-badge">שקוף ומשתלם</div>
+        <h2 id="pricing-heading" class="pricing-title">עלות השירות</h2>
+        <div class="pricing-main">
+          <div class="pricing-percent">5%–10%</div>
+          <div class="pricing-plus">+ מע"מ</div>
+        </div>
+        <ul class="pricing-features" role="list">
+          <li><span aria-hidden="true">✔</span> רק אחרי שתקבלו את הכסף</li>
+          <li><span aria-hidden="true">✔</span> ללא תשלום מראש</li>
+          <li><span aria-hidden="true">✔</span> נמוך מהממוצע בשוק</li>
+          <li><span aria-hidden="true">✔</span> אם אין החזר – אין תשלום</li>
+        </ul>
+        <a href="#questionnaire" class="btn btn-primary btn-large" aria-label="בדוק זכאות חינם עכשיו">
+          בדיקה חינם – בלי סיכון ←
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div class="footer-logo">
+        <div class="logo-icon footer-logo-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 2L4 9v9c0 8.28 5.96 16.02 14 18 8.04-1.98 14-9.72 14-18V9L18 2z" fill="#0057A8"/>
+            <path d="M14 17l3 3 6-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="footer-logo-name">המרכז הארצי לזכויות מס</span>
+      </div>
+      <p class="footer-disclaimer">
+        המרכז הארצי לזכויות מס הוא גוף פרטי. השירות ניתן כחוק ובשיתוף הגופים הרלוונטיים בהתאם לצורך.
+        כל המידע באתר זה הוא למטרות מידע כלליות בלבד ואינו מהווה ייעוץ משפטי או מקצועי.
+      </p>
+      <p class="footer-copy">© <span id="footer-year"></span> המרכז הארצי לזכויות מס. כל הזכויות שמורות.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
