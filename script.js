@@ -107,32 +107,14 @@ function renderQuestion(index) {
   block.innerHTML = `
     <p class="question-text" id="q-text-${index}">${q.text}</p>
     <div class="answer-btns" role="group" aria-labelledby="q-text-${index}">
-      <button
-        class="answer-btn yes-btn"
-        data-answer="true"
-        aria-label="כן – ${q.text}"
-      >
-        <span class="answer-icon" aria-hidden="true">✅</span> כן
-      </button>
-      <button
-        class="answer-btn no-btn"
-        data-answer="false"
-        aria-label="לא – ${q.text}"
-      >
-        <span class="answer-icon" aria-hidden="true">❌</span> לא
-      </button>
+      <button class="answer-btn yes-btn" data-answer="true" aria-label="כן – ${q.text}">כן</button>
+      <button class="answer-btn no-btn" data-answer="false" aria-label="לא – ${q.text}">לא</button>
     </div>
   `;
 
   // Clear and inject
   questionArea.innerHTML = "";
   questionArea.appendChild(block);
-
-  // Focus the first answer button for keyboard nav
-  const firstBtn = block.querySelector(".answer-btn");
-  if (firstBtn) {
-    setTimeout(() => firstBtn.focus(), 80);
-  }
 
   // Back button visibility
   btnBack.style.display = index > 0 ? "inline-flex" : "none";
@@ -166,17 +148,28 @@ function handleAnswer(e) {
   const raw = btn.dataset.answer;
   const value = raw === "true";
 
+  // Disable both buttons immediately and mark the chosen one
+  const parent = btn.closest(".answer-btns");
+  if (parent) {
+    parent.querySelectorAll(".answer-btn").forEach((b) => {
+      b.disabled = true;
+    });
+  }
+  btn.classList.add("selected");
+
   // Store answer
   const key = QUESTIONS[currentQuestion].key;
   answers[key] = value;
 
-  currentQuestion++;
-
-  if (currentQuestion < QUESTIONS.length) {
-    renderQuestion(currentQuestion);
-  } else {
-    showFormStep();
-  }
+  // Advance after a brief moment so the user sees their selection
+  setTimeout(() => {
+    currentQuestion++;
+    if (currentQuestion < QUESTIONS.length) {
+      renderQuestion(currentQuestion);
+    } else {
+      showFormStep();
+    }
+  }, 280);
 }
 
 // ---- Show form step ----
