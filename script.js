@@ -371,13 +371,13 @@ let a11yState = {
 
 function saveA11yState() {
   try {
-    localStorage.setItem("a11y_state", JSON.stringify(a11yState));
+    localStorage.setItem("ntrc_a11y_state", JSON.stringify(a11yState));
   } catch (_) {}
 }
 
 function loadA11yState() {
   try {
-    const saved = localStorage.getItem("a11y_state");
+    const saved = localStorage.getItem("ntrc_a11y_state");
     if (saved) {
       const parsed = JSON.parse(saved);
       a11yState = { ...a11yState, ...parsed };
