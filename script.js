@@ -285,13 +285,13 @@ leadForm.addEventListener("submit", async (e) => {
   sendUrl.searchParams.set("secret", secret);
 
   try {
-    // First attempt: standard JSON with Authorization header.
+    // First attempt: standard JSON with X-Webhook-Secret header.
     // Works when the server has CORS configured correctly.
     const res = await fetch(webhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${secret}`,
+        "X-Webhook-Secret": secret,
       },
       body: JSON.stringify(payload),
       keepalive: true,
