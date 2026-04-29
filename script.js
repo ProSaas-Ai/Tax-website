@@ -211,10 +211,12 @@ function validateForm() {
   let valid = true;
   const nameInput  = document.getElementById("field-name");
   const phoneInput = document.getElementById("field-phone");
+  const consentBox = document.getElementById("consent-checkbox");
 
   // Reset errors
-  document.getElementById("name-error").textContent   = "";
-  document.getElementById("phone-error").textContent  = "";
+  document.getElementById("name-error").textContent    = "";
+  document.getElementById("phone-error").textContent   = "";
+  document.getElementById("consent-error").textContent = "";
   [nameInput, phoneInput].forEach((el) => el.classList.remove("error"));
 
   // Name
@@ -238,6 +240,12 @@ function validateForm() {
   } else if (!/^0[1-9]\d{7,8}$/.test(phoneVal)) {
     document.getElementById("phone-error").textContent = "מספר הטלפון אינו תקין";
     phoneInput.classList.add("error");
+    valid = false;
+  }
+
+  // Consent checkbox – must be checked
+  if (!consentBox.checked) {
+    document.getElementById("consent-error").textContent = "יש לאשר את ההצהרה לפני השליחה";
     valid = false;
   }
 
@@ -270,18 +278,40 @@ leadForm.addEventListener("submit", async (e) => {
     timestamp: new Date().toISOString(),
   };
 
+  // Build URL with secret as query param so it reaches the server even in no-cors mode
+  // (no-cors prevents CORS preflight; Authorization header would be dropped by the browser)
+  const sendUrl = new URL(webhookUrl);
+  sendUrl.searchParams.set("secret", secret);
+
   try {
-    await fetch(webhookUrl, {
+    // First attempt: standard JSON with Authorization header.
+    // Works when the server has CORS configured correctly.
+    const res = await fetch(webhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${secret}`,
       },
       body: JSON.stringify(payload),
+      keepalive: true,
     });
-  } catch (err) {
-    console.error("Webhook error:", err);
-    // Show thank you regardless – don't block the user
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+  } catch (_corsOrHttpErr) {
+    // Fallback: no-cors ensures the POST always reaches the server without preflight.
+    // Secret is in the URL; body is the raw JSON string.
+    try {
+      await fetch(sendUrl.toString(), {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      });
+    } catch (err) {
+      console.error("Webhook error:", err);
+    }
   } finally {
     showThankyou();
   }
