@@ -50,15 +50,21 @@
   <!-- ===== HEADER ===== -->
   <header class="site-header" role="banner">
     <div class="container header-inner">
+      <!-- רשות המיסים – right side -->
+      <div class="header-gov-logo header-gov-logo-right">
+        <img src="IMG_3828.png" alt="רשות המיסים" class="gov-logo-img" />
+      </div>
+
       <div class="logo-group">
         <div class="logo-text">
           <span class="logo-main">המרכז הארצי</span>
           <span class="logo-sub">לזכויות מס</span>
         </div>
       </div>
-      <div class="header-right">
-        <span class="header-badge">בדיקה חינם</span>
 
+      <!-- מדינת ישראל – left side -->
+      <div class="header-right header-gov-logo-left">
+        <img src="IMG_3829.jpeg" alt="מדינת ישראל" class="gov-logo-img" />
       </div>
     </div>
   </header>
@@ -179,41 +185,9 @@
               <span class="field-error" id="phone-error" role="alert" aria-live="assertive"></span>
             </div>
 
-            <div class="form-group">
-              <label for="field-email" class="form-label">אימייל <span class="optional">(אופציונלי)</span></label>
-              <input
-                type="email"
-                id="field-email"
-                name="email"
-                class="form-input"
-                placeholder="israel@example.com"
-                autocomplete="email"
-                aria-describedby="email-error"
-              />
-              <span class="field-error" id="email-error" role="alert" aria-live="assertive"></span>
-            </div>
-
-            <div class="consent-group">
-              <label class="consent-label">
-                <input
-                  type="checkbox"
-                  id="consent-check"
-                  class="consent-checkbox"
-                  aria-required="true"
-                  aria-describedby="consent-error"
-                />
-                <span class="consent-text">
-                  אני מאשר/ת קבלת מידע ממוקד על זכויות המס שלי, ומסכים/ה
-                  <a href="#" class="consent-link">לתנאי השימוש</a>
-                  ולמדיניות הפרטיות.
-                  נציג ייצור עמי קשר לצורך הבדיקה.
-                </span>
-              </label>
-              <span class="field-error" id="consent-error" role="alert" aria-live="assertive"></span>
-            </div>
 
             <button type="submit" class="btn btn-primary btn-submit" id="btn-submit" aria-label="שלח טופס ובדוק זכאות">
-              <span id="btn-submit-text">בדקו זכאות עכשיו ←</span>
+              <span id="btn-submit-text">אני פונה מיוזמתי ל"המרכז הארצי להחזרי מס" לצורך בדיקת זכאות, מאשר/ת כי השארת פרטיי נעשית מרצוני החופשי ומהווה בקשה מפורשת שיצרו עמי קשר בטלפון, WhatsApp, SMS או דוא"ל בקשר לפנייתי ולשירותים רלוונטיים, מסכים/ה כי פרטיי יועברו ל"המרכז הארצי להחזרי מס" ו/או לחברה או גורם מקצועי מטעמו לצורך טיפול בפנייתי ויצירת קשר עמי, מצהיר/ה כי פנייתי נעשית לצורך קבלת שירות אמיתי וביוזמתי, ומאשר/ת את תנאי השימוש ומדיניות הפרטיות, לרבות האפשרות להסיר את הסכמתי בכל עת</span>
               <span id="btn-submit-loading" style="display:none;" aria-live="assertive">שולח... ⏳</span>
             </button>
 

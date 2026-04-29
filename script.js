@@ -208,15 +208,11 @@ function validateForm() {
   let valid = true;
   const nameInput  = document.getElementById("field-name");
   const phoneInput = document.getElementById("field-phone");
-  const emailInput = document.getElementById("field-email");
-  const consentCheck = document.getElementById("consent-check");
 
   // Reset errors
   document.getElementById("name-error").textContent   = "";
   document.getElementById("phone-error").textContent  = "";
-  document.getElementById("email-error").textContent  = "";
-  document.getElementById("consent-error").textContent = "";
-  [nameInput, phoneInput, emailInput].forEach((el) => el.classList.remove("error"));
+  [nameInput, phoneInput].forEach((el) => el.classList.remove("error"));
 
   // Name
   const nameVal = nameInput.value.trim();
@@ -242,20 +238,6 @@ function validateForm() {
     valid = false;
   }
 
-  // Email – optional but validate if filled
-  const emailVal = emailInput.value.trim();
-  if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-    document.getElementById("email-error").textContent = "כתובת האימייל אינה תקינה";
-    emailInput.classList.add("error");
-    valid = false;
-  }
-
-  // Consent
-  if (!consentCheck.checked) {
-    document.getElementById("consent-error").textContent = "יש לאשר את התנאים לפני השליחה";
-    valid = false;
-  }
-
   return valid;
 }
 
@@ -273,14 +255,12 @@ leadForm.addEventListener("submit", async (e) => {
 
   const name  = document.getElementById("field-name").value.trim();
   const phone = document.getElementById("field-phone").value.trim().replace(/[-\s]/g, "");
-  const email = document.getElementById("field-email").value.trim();
   const score = calcScore();
   const { webhookUrl, lead_status } = getWebhookConfig();
 
   const payload = {
     name,
     phone,
-    email,
     answers,
     score,
     lead_status,
