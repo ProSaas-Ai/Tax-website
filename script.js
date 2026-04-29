@@ -7,9 +7,9 @@
 
 // ---- Webhook URLs & Secrets ----
 const WEBHOOK_HIGH        = "https://prosaas.pro/api/webhook/leads/7";
-const X-Webhook-Secret = "wh_c56bNZmrou9srMqfqRxttZQzyi_CQ2NrYEWmz-54Bgk";
+const WEBHOOK_HIGH_SECRET = "wh_c56bNZmrou9srMqfqRxttZQzyi_CQ2NrYEWmz-54Bgk";
 const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/6";
-const X-Webhook-Secret  = "wh_RqCEekRLnRDcYvzmMh9EpR6m6r51oym7g7a8gWDates";
+const WEBHOOK_LOW_SECRET  = "wh_RqCEekRLnRDcYvzmMh9EpR6m6r51oym7g7a8gWDates";
 
 // ---- Questions ----
 const QUESTIONS = [
@@ -285,13 +285,13 @@ leadForm.addEventListener("submit", async (e) => {
   sendUrl.searchParams.set("secret", secret);
 
   try {
-    // First attempt: standard JSON with Authorization header.
+    // First attempt: standard JSON with X-Webhook-Secret header.
     // Works when the server has CORS configured correctly.
     const res = await fetch(webhookUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${secret}`,
+        "X-Webhook-Secret": secret,
       },
       body: JSON.stringify(payload),
       keepalive: true,
