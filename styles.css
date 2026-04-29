@@ -288,6 +288,34 @@ body.a11y-no-anim *::after {
   border: 1px solid rgba(0,56,168,0.25);
 }
 
+/* Government logos in header */
+.header-gov-logo {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.header-gov-logo-right {
+  right: 20px;
+}
+.header-gov-logo-left {
+  left: 20px;
+}
+.gov-logo-img {
+  height: 54px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  border-radius: 4px;
+}
+@media (max-width: 640px) {
+  .gov-logo-img {
+    height: 36px;
+  }
+  .header-gov-logo-right { right: 8px; }
+  .header-gov-logo-left  { left: 8px; }
+}
+
 /* ============================================================
    HERO
    ============================================================ */
@@ -606,9 +634,14 @@ body.a11y-no-anim *::after {
 /* Submit */
 .btn-submit {
   width: 100%;
-  padding: 15px 28px;
-  font-size: 1.03rem;
+  padding: 15px 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
   border-radius: var(--radius);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 .btn-submit:disabled { opacity: 0.62; cursor: not-allowed; }
 
