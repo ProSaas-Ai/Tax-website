@@ -718,7 +718,45 @@ body.a11y-no-anim *::after {
   color: var(--gov-blue);
   margin-bottom: 14px;
 }
+.thankyou-info-box--instant {
+  background: #edfff3;
+  border-color: #22c55e;
+  color: #15803d;
+}
 .thankyou-small { font-size: 0.83rem; color: var(--text-muted); }
+
+/* Free badge line in form-step header */
+.free-badge-line { margin-top: 6px; margin-bottom: 6px; }
+.free-badge {
+  display: inline-block;
+  background: #edfff3;
+  color: #15803d;
+  border: 1.5px solid #22c55e;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* Trust list below form-step header */
+.form-trust-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: right;
+}
+.form-trust-list li {
+  font-size: 0.87rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-weight: 500;
+  line-height: 1.5;
+}
 
 /* ============================================================
    STATS SECTION
