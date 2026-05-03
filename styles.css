@@ -108,6 +108,7 @@ body.a11y-contrast .btn-hero:focus-visible    { background: #E0E0FF !important; 
 /* a11y reset button – has hardcoded reddish palette */
 body.a11y-contrast .a11y-reset               { background: #FFF0F0; border-color: #880000; color: #880000; }
 body.a11y-contrast .a11y-reset:hover         { background: #FFE0E0; }
+body.a11y-contrast .a11y-reset .a11y-option-icon { color: #880000; }
 
 /* Ensure the accessibility FAB and panel are always clearly visible,
    independently of every other style change. */
@@ -119,15 +120,26 @@ body.a11y-contrast .a11y-fab {
 }
 body.a11y-contrast .a11y-fab:hover,
 body.a11y-contrast .a11y-fab:focus-visible   { background: #0000CC; }
-body.a11y-contrast .a11y-panel               { background: #FFFFFF; border: 2px solid #000000; color: #000000; }
-body.a11y-contrast .a11y-title               { color: #000000; }
+body.a11y-contrast .a11y-panel               { border: 2px solid #000000; }
+body.a11y-contrast .a11y-panel-header        { background: #00008B; }
+body.a11y-contrast .a11y-title               { color: #FFFFFF; }
+body.a11y-contrast .a11y-close-btn           { color: rgba(255,255,255,0.9); }
+body.a11y-contrast .a11y-section-label       { color: #111111; }
+body.a11y-contrast .a11y-text-ctrl          { border-color: #000000; }
+body.a11y-contrast .a11y-size-btn            { background: #EEEEEE; border-color: #000000; color: #000000; }
+body.a11y-contrast .a11y-size-btn:hover,
+body.a11y-contrast .a11y-size-btn:focus-visible { background: #E0E0FF; color: #000066; }
+body.a11y-contrast .a11y-size-display        { background: #FFFFFF; border-color: #000000; color: #000000; }
 body.a11y-contrast .a11y-option-btn          { background: #FFFFFF; border: 2px solid #000000; color: #000000; }
 body.a11y-contrast .a11y-option-btn:hover,
 body.a11y-contrast .a11y-option-btn:focus-visible { background: #E0E0FF; border-color: #0000CC; color: #000000; }
+body.a11y-contrast .a11y-option-btn[aria-checked="true"],
 body.a11y-contrast .a11y-option-btn.active   { background: #00008B; color: #FFFFFF; border-color: #00008B; }
+body.a11y-contrast .a11y-option-btn[aria-checked="true"] .a11y-option-icon { color: #FFFFFF; }
 
-body.a11y-text-lg  { font-size: calc(var(--font-base) * 1.15); }
-body.a11y-text-xl  { font-size: calc(var(--font-base) * 1.30); }
+/* Text scaling: must target html so rem units (relative to html) scale correctly */
+html.a11y-text-lg  { font-size: calc(var(--font-base) * 1.15); }
+html.a11y-text-xl  { font-size: calc(var(--font-base) * 1.30); }
 body.a11y-links a  {
   outline: 2px solid var(--gov-blue) !important;
   text-decoration: underline !important;
@@ -215,83 +227,204 @@ body.a11y-no-anim *::after {
 .btn-arrow { font-size: 1.05em; }
 
 /* ============================================================
-   ACCESSIBILITY FAB
+   ACCESSIBILITY FAB & PANEL (gov.il standard)
    ============================================================ */
 .a11y-fab {
   position: fixed;
-  bottom: 22px;
-  left: 22px;
+  bottom: 24px;
+  left: 24px;
   z-index: 9999;
   background: var(--gov-blue-dark);
   color: #fff;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 50px;
-  padding: 10px 16px 10px 13px;
+  padding: 10px 18px 10px 14px;
   font-family: var(--font);
   font-size: 0.875rem;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.22);
-  transition: background var(--ease);
+  box-shadow: 0 3px 10px rgba(0,56,168,0.30);
+  transition: background var(--ease), box-shadow var(--ease);
 }
 .a11y-fab:hover,
-.a11y-fab:focus-visible { background: var(--gov-blue); }
+.a11y-fab:focus-visible {
+  background: var(--gov-blue);
+  box-shadow: 0 4px 16px rgba(0,56,168,0.40);
+}
+.a11y-fab-icon { flex-shrink: 0; }
 .a11y-fab-label { font-size: 0.875rem; }
 
 .a11y-panel {
   position: fixed;
-  bottom: 76px;
-  left: 22px;
+  bottom: 78px;
+  left: 24px;
   z-index: 9998;
   background: var(--bg-white);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 18px 16px 14px;
-  width: 214px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  width: 248px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.14);
   display: none;
+  overflow: hidden;
 }
 .a11y-panel.open { display: block; }
 
-.a11y-title {
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 11px;
+/* Panel header – gov.il blue bar */
+.a11y-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--gov-blue-dark);
+  color: #fff;
+  padding: 11px 14px;
 }
-.a11y-options { display: flex; flex-direction: column; gap: 5px; }
+.a11y-header-icon { flex-shrink: 0; opacity: 0.9; }
+
+.a11y-title {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.a11y-close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--ease), background var(--ease);
+  flex-shrink: 0;
+}
+.a11y-close-btn:hover,
+.a11y-close-btn:focus-visible {
+  color: #fff;
+  background: rgba(255,255,255,0.2);
+}
+
+/* Panel body */
+.a11y-panel-body { padding: 14px 14px 12px; }
+
+/* Text-size section */
+.a11y-section { margin-bottom: 12px; }
+.a11y-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.a11y-text-ctrl {
+  display: flex;
+  align-items: stretch;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-white);
+}
+.a11y-size-btn {
+  flex: 0 0 44px;
+  height: 38px;
+  background: var(--bg-light);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  transition: background var(--ease), color var(--ease);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.a11y-size-btn:hover,
+.a11y-size-btn:focus-visible {
+  background: var(--gov-blue-light);
+  color: var(--gov-blue);
+}
+.a11y-size-btn:focus-visible {
+  outline: 2px solid var(--gov-blue);
+  outline-offset: -2px;
+}
+.a11y-size-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.a11y-size-btn:disabled:hover { background: var(--bg-light); color: var(--text-primary); }
+
+.a11y-size-display {
+  flex: 1;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-right: 1.5px solid var(--border);
+  border-left: 1.5px solid var(--border);
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-white);
+}
+
+/* Toggle options */
+.a11y-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
 
 .a11y-option-btn {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 9px;
   background: var(--bg-light);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: 8px 11px;
+  padding: 9px 12px;
   font-family: var(--font);
   font-size: 0.84rem;
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
-  transition: background var(--ease), border-color var(--ease);
+  transition: background var(--ease), border-color var(--ease), color var(--ease);
+  text-align: right;
+  width: 100%;
+}
+.a11y-option-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  color: var(--text-secondary);
+  transition: color var(--ease);
 }
 .a11y-option-btn:hover,
 .a11y-option-btn:focus-visible {
   background: var(--gov-blue-light);
   border-color: var(--gov-blue);
 }
+.a11y-option-btn[aria-checked="true"],
 .a11y-option-btn.active {
   background: var(--gov-blue);
   color: #fff;
   border-color: var(--gov-blue);
 }
+.a11y-option-btn[aria-checked="true"] .a11y-option-icon,
+.a11y-option-btn.active .a11y-option-icon { color: #fff; }
+
 .a11y-reset { background: #FFF5F5; border-color: #FECACA; color: var(--error); }
 .a11y-reset:hover { background: #FEE2E2; }
-.a11y-icon { font-size: 0.92rem; min-width: 18px; text-align: center; }
+.a11y-reset .a11y-option-icon { color: var(--error); }
+.a11y-reset[aria-checked="true"],
+.a11y-reset.active { background: var(--gov-blue); color: #fff; border-color: var(--gov-blue); }
 
 /* ============================================================
    HEADER
@@ -1186,8 +1319,8 @@ body.a11y-no-anim *::after {
   .pricing-card    { padding: 26px 16px; }
   .pricing-percent { font-size: 2.2rem; }
 
-  .a11y-fab    { bottom: 16px; left: 16px; padding: 8px 13px; font-size: 0.83rem; }
-  .a11y-panel  { left: 16px; bottom: 66px; width: 202px; }
+  .a11y-fab    { bottom: 16px; left: 16px; padding: 8px 14px 8px 12px; font-size: 0.82rem; }
+  .a11y-panel  { left: 16px; bottom: 66px; width: 220px; }
 
   .faq-question { font-size: 0.9rem; padding: 13px 15px; }
   .faq-answer   { padding: 10px 15px 14px; }

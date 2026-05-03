@@ -62,6 +62,9 @@ const answers = {
 let currentQuestion = 0;
 let isSubmitting = false;
 
+// ---- Accessibility text-size labels ----
+const A11Y_SIZE_LABELS = ["רגיל", "גדול", "גדול מאוד"];
+
 // ---- DOM refs ----
 const quizStep    = document.getElementById("quiz-step");
 const formStep    = document.getElementById("form-step");
@@ -392,10 +395,13 @@ function loadA11yState() {
 
 function applyA11yState() {
   const body = document.body;
-  // Text
-  body.classList.remove("a11y-text-lg", "a11y-text-xl");
-  if (a11yState.textLevel === 1) body.classList.add("a11y-text-lg");
-  if (a11yState.textLevel === 2) body.classList.add("a11y-text-xl");
+  const html = document.documentElement;
+
+  // Text – must target html so rem units (relative to html) scale correctly
+  html.classList.remove("a11y-text-lg", "a11y-text-xl");
+  if (a11yState.textLevel === 1) html.classList.add("a11y-text-lg");
+  if (a11yState.textLevel === 2) html.classList.add("a11y-text-xl");
+
   // Contrast
   body.classList.toggle("a11y-contrast", a11yState.contrast);
   // Links
@@ -403,16 +409,28 @@ function applyA11yState() {
   // Animations
   body.classList.toggle("a11y-no-anim", a11yState.noAnim);
 
-  // Update button active states
-  toggleBtnActive("a11y-increase-text", a11yState.textLevel > 0);
+  // Update button active states and aria-checked
   toggleBtnActive("a11y-contrast", a11yState.contrast);
   toggleBtnActive("a11y-links", a11yState.links);
   toggleBtnActive("a11y-animations", a11yState.noAnim);
+
+  // Update text-size control
+  const indicator = document.getElementById("a11y-size-display");
+  if (indicator) indicator.textContent = A11Y_SIZE_LABELS[a11yState.textLevel] || A11Y_SIZE_LABELS[0];
+
+  const decreaseBtn = document.getElementById("a11y-decrease-text");
+  const increaseBtn = document.getElementById("a11y-increase-text");
+  if (decreaseBtn) decreaseBtn.disabled = a11yState.textLevel === 0;
+  if (increaseBtn) increaseBtn.disabled = a11yState.textLevel === 2;
 }
 
 function toggleBtnActive(id, active) {
   const el = document.getElementById(id);
-  if (el) el.classList.toggle("active", active);
+  if (!el) return;
+  el.classList.toggle("active", active);
+  if (el.getAttribute("role") === "switch") {
+    el.setAttribute("aria-checked", active ? "true" : "false");
+  }
 }
 
 const FOCUSABLE_SELECTOR = "button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
@@ -424,9 +442,22 @@ a11yToggle.addEventListener("click", () => {
   a11yToggle.setAttribute("aria-label", isOpen ? "סגור תפריט נגישות" : "פתח תפריט נגישות");
   a11yPanel.setAttribute("aria-hidden", isOpen ? "false" : "true");
   if (isOpen) {
-    const firstBtn = a11yPanel.querySelector(".a11y-option-btn");
-    if (firstBtn) firstBtn.focus();
+    const closeBtn = document.getElementById("a11y-close");
+    if (closeBtn) closeBtn.focus();
+    else {
+      const firstBtn = a11yPanel.querySelector("button");
+      if (firstBtn) firstBtn.focus();
+    }
   }
+});
+
+// Close button (inside panel header)
+document.getElementById("a11y-close").addEventListener("click", () => {
+  a11yPanel.classList.remove("open");
+  a11yToggle.setAttribute("aria-expanded", "false");
+  a11yToggle.setAttribute("aria-label", "פתח תפריט נגישות");
+  a11yPanel.setAttribute("aria-hidden", "true");
+  a11yToggle.focus();
 });
 
 // Close panel on Escape
@@ -505,6 +536,7 @@ document.getElementById("a11y-animations").addEventListener("click", () => {
 
 document.getElementById("a11y-reset").addEventListener("click", () => {
   a11yState = { textLevel: 0, contrast: false, links: false, noAnim: false };
+  document.documentElement.classList.remove("a11y-text-lg", "a11y-text-xl");
   applyA11yState();
   saveA11yState();
 });
