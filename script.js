@@ -415,10 +415,13 @@ function toggleBtnActive(id, active) {
   if (el) el.classList.toggle("active", active);
 }
 
+const FOCUSABLE_SELECTOR = "button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
+
 // Toggle panel
 a11yToggle.addEventListener("click", () => {
   const isOpen = a11yPanel.classList.toggle("open");
   a11yToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  a11yToggle.setAttribute("aria-label", isOpen ? "סגור תפריט נגישות" : "פתח תפריט נגישות");
   a11yPanel.setAttribute("aria-hidden", isOpen ? "false" : "true");
   if (isOpen) {
     const firstBtn = a11yPanel.querySelector(".a11y-option-btn");
@@ -431,8 +434,29 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && a11yPanel.classList.contains("open")) {
     a11yPanel.classList.remove("open");
     a11yToggle.setAttribute("aria-expanded", "false");
+    a11yToggle.setAttribute("aria-label", "פתח תפריט נגישות");
     a11yPanel.setAttribute("aria-hidden", "true");
     a11yToggle.focus();
+  }
+});
+
+// Focus trap – keep keyboard focus inside the panel while it is open.
+// Focusable elements are cached on open (panel content never changes dynamically).
+let panelFocusable = [];
+a11yToggle.addEventListener("click", () => {
+  if (a11yPanel.classList.contains("open")) {
+    panelFocusable = Array.from(a11yPanel.querySelectorAll(FOCUSABLE_SELECTOR));
+  }
+});
+
+a11yPanel.addEventListener("keydown", (e) => {
+  if (e.key !== "Tab" || !panelFocusable.length) return;
+  const first = panelFocusable[0];
+  const last  = panelFocusable[panelFocusable.length - 1];
+  if (e.shiftKey) {
+    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+  } else {
+    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
   }
 });
 
@@ -442,6 +466,7 @@ document.addEventListener("click", (e) => {
     if (a11yPanel.classList.contains("open")) {
       a11yPanel.classList.remove("open");
       a11yToggle.setAttribute("aria-expanded", "false");
+      a11yToggle.setAttribute("aria-label", "פתח תפריט נגישות");
       a11yPanel.setAttribute("aria-hidden", "true");
     }
   }
