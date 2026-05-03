@@ -12,38 +12,74 @@
 </head>
 <body>
 
-  <!-- ===== ACCESSIBILITY WIDGET ===== -->
-  <div id="a11y-panel" class="a11y-panel" role="dialog" aria-label="אפשרויות נגישות" aria-modal="true" aria-hidden="true">
-    <h3 class="a11y-title">הגדרות נגישות</h3>
-    <div class="a11y-options">
-      <button class="a11y-option-btn" id="a11y-increase-text" aria-label="הגדל טקסט">
-        <span class="a11y-icon">A+</span>
-        <span>הגדל טקסט</span>
+  <!-- ===== ACCESSIBILITY WIDGET (gov.il standard) ===== -->
+  <div id="a11y-panel" class="a11y-panel" role="dialog" aria-labelledby="a11y-panel-title" aria-modal="true" aria-hidden="true">
+    <div class="a11y-panel-header">
+      <svg class="a11y-header-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <circle cx="12" cy="4.5" r="2.5"/>
+        <path d="M16 8.5H8a1 1 0 0 0 0 2h3v3l-2.2 5.5H11l1.5-3.5h1L15 19h2.2L15 13.5V10.5H16a1 1 0 0 0 0-2z"/>
+      </svg>
+      <h3 class="a11y-title" id="a11y-panel-title">הגדרות נגישות</h3>
+      <button class="a11y-close-btn" id="a11y-close" aria-label="סגור תפריט נגישות">
+        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
       </button>
-      <button class="a11y-option-btn" id="a11y-decrease-text" aria-label="הקטן טקסט">
-        <span class="a11y-icon">A-</span>
-        <span>הקטן טקסט</span>
-      </button>
-      <button class="a11y-option-btn" id="a11y-contrast" aria-label="ניגודיות גבוהה">
-        <span class="a11y-icon">◑</span>
-        <span>ניגודיות גבוהה</span>
-      </button>
-      <button class="a11y-option-btn" id="a11y-links" aria-label="הדגשת קישורים">
-        <span class="a11y-icon">🔗</span>
-        <span>הדגש קישורים</span>
-      </button>
-      <button class="a11y-option-btn" id="a11y-animations" aria-label="עצור אנימציות">
-        <span class="a11y-icon">⏸</span>
-        <span>עצור אנימציות</span>
-      </button>
-      <button class="a11y-option-btn a11y-reset" id="a11y-reset" aria-label="איפוס הגדרות">
-        <span class="a11y-icon">↺</span>
-        <span>איפוס</span>
+    </div>
+    <div class="a11y-panel-body">
+      <div class="a11y-section">
+        <p class="a11y-section-label" id="a11y-textsize-label">גודל טקסט</p>
+        <div class="a11y-text-ctrl" role="group" aria-labelledby="a11y-textsize-label">
+          <button class="a11y-size-btn" id="a11y-decrease-text" aria-label="הקטן טקסט" disabled>A−</button>
+          <span class="a11y-size-display" id="a11y-size-display" aria-live="polite" aria-atomic="true">רגיל</span>
+          <button class="a11y-size-btn" id="a11y-increase-text" aria-label="הגדל טקסט">A+</button>
+        </div>
+      </div>
+      <div class="a11y-options">
+        <button class="a11y-option-btn" id="a11y-contrast" role="switch" aria-checked="false" aria-label="ניגודיות גבוהה">
+          <span class="a11y-option-icon" aria-hidden="true">
+            <svg focusable="false" viewBox="0 0 24 24" width="16" height="16">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 2a10 10 0 0 0 0 20V2z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="a11y-option-label">ניגודיות גבוהה</span>
+        </button>
+        <button class="a11y-option-btn" id="a11y-links" role="switch" aria-checked="false" aria-label="הדגשת קישורים">
+          <span class="a11y-option-icon" aria-hidden="true">
+            <svg focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </span>
+          <span class="a11y-option-label">הדגש קישורים</span>
+        </button>
+        <button class="a11y-option-btn" id="a11y-animations" role="switch" aria-checked="false" aria-label="עצירת אנימציות">
+          <span class="a11y-option-icon" aria-hidden="true">
+            <svg focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <rect x="6" y="4" width="4" height="16" rx="1"/>
+              <rect x="14" y="4" width="4" height="16" rx="1"/>
+            </svg>
+          </span>
+          <span class="a11y-option-label">עצור אנימציות</span>
+        </button>
+      </div>
+      <button class="a11y-option-btn a11y-reset" id="a11y-reset" aria-label="איפוס כל הגדרות הנגישות">
+        <span class="a11y-option-icon" aria-hidden="true">
+          <svg focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </span>
+        <span class="a11y-option-label">איפוס הגדרות</span>
       </button>
     </div>
   </div>
-  <button id="a11y-toggle" class="a11y-fab" aria-label="פתח תפריט נגישות" aria-expanded="false" aria-controls="a11y-panel">
-    <span aria-hidden="true">♿</span>
+  <button id="a11y-toggle" class="a11y-fab" aria-label="פתח תפריט נגישות" aria-expanded="false" aria-controls="a11y-panel" aria-haspopup="dialog">
+    <svg class="a11y-fab-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+      <circle cx="12" cy="4.5" r="2.5"/>
+      <path d="M16 8.5H8a1 1 0 0 0 0 2h3v3l-2.2 5.5H11l1.5-3.5h1L15 19h2.2L15 13.5V10.5H16a1 1 0 0 0 0-2z"/>
+    </svg>
     <span class="a11y-fab-label">נגישות</span>
   </button>
 
