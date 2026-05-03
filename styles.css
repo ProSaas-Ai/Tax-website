@@ -62,7 +62,70 @@ body {
 }
 
 /* ---- Accessibility ---- */
-body.a11y-contrast { filter: contrast(1.5); }
+
+/*
+ * High-contrast mode is implemented by overriding CSS custom properties and
+ * a small set of hardcoded colours.  We intentionally do NOT use
+ * `filter: contrast()` on <body> because that creates a new CSS containing
+ * block for `position:fixed` children, which makes the accessibility FAB and
+ * panel scroll off-screen instead of staying fixed in the viewport.
+ */
+body.a11y-contrast {
+  /* Re-map design tokens to high-contrast values */
+  --text-primary:    #000000;
+  --text-secondary:  #000000;
+  --text-muted:      #111111;
+  --bg-white:        #FFFFFF;
+  --bg-light:        #FFFFFF;
+  --bg-subtle:       #EEEEEE;
+  --border:          #000000;
+  --border-light:    #333333;
+  --gov-blue:        #0000CC;
+  --gov-blue-dark:   #00008B;
+  --gov-blue-hover:  #000077;
+  --gov-blue-light:  #E0E0FF;
+  --gov-blue-mid:    #8888EE;
+  --success:         #004400;
+  --success-bg:      #CCFFCC;
+  --error:           #880000;
+}
+
+/* Hero banner – uses mostly hardcoded colours */
+body.a11y-contrast .hero-section              { background: #000066; }
+body.a11y-contrast .hero-title,
+body.a11y-contrast .hero-subtitle,
+body.a11y-contrast .hero-bullets li           { color: #FFFFFF; }
+body.a11y-contrast .hero-title .highlight,
+body.a11y-contrast .stat-num,
+body.a11y-contrast .bullet-check              { color: #AADDFF; }
+body.a11y-contrast .hero-disclaimer           { color: rgba(255,255,255,0.85); }
+body.a11y-contrast .stat-card                 { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.4); }
+body.a11y-contrast .stat-desc                 { color: #FFFFFF; }
+body.a11y-contrast .btn-hero                  { background: #FFFFFF !important; color: #000066 !important; border-color: #FFFFFF !important; }
+body.a11y-contrast .btn-hero:hover,
+body.a11y-contrast .btn-hero:focus-visible    { background: #E0E0FF !important; border-color: #E0E0FF !important; color: #000044 !important; }
+
+/* a11y reset button – has hardcoded reddish palette */
+body.a11y-contrast .a11y-reset               { background: #FFF0F0; border-color: #880000; color: #880000; }
+body.a11y-contrast .a11y-reset:hover         { background: #FFE0E0; }
+
+/* Ensure the accessibility FAB and panel are always clearly visible,
+   independently of every other style change. */
+body.a11y-contrast .a11y-fab {
+  background: #00008B;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 0 0 2px #00008B, 0 2px 8px rgba(0,0,0,0.5);
+}
+body.a11y-contrast .a11y-fab:hover,
+body.a11y-contrast .a11y-fab:focus-visible   { background: #0000CC; }
+body.a11y-contrast .a11y-panel               { background: #FFFFFF; border: 2px solid #000000; color: #000000; }
+body.a11y-contrast .a11y-title               { color: #000000; }
+body.a11y-contrast .a11y-option-btn          { background: #FFFFFF; border: 2px solid #000000; color: #000000; }
+body.a11y-contrast .a11y-option-btn:hover,
+body.a11y-contrast .a11y-option-btn:focus-visible { background: #E0E0FF; border-color: #0000CC; color: #000000; }
+body.a11y-contrast .a11y-option-btn.active   { background: #00008B; color: #FFFFFF; border-color: #00008B; }
+
 body.a11y-text-lg  { font-size: calc(var(--font-base) * 1.15); }
 body.a11y-text-xl  { font-size: calc(var(--font-base) * 1.30); }
 body.a11y-links a  {
