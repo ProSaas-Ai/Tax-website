@@ -6,10 +6,10 @@
 "use strict";
 
 // ---- Webhook URLs & Secrets ----
-const WEBHOOK_HIGH        = "https://prosaas.pro/api/webhook/leads/7";
-const WEBHOOK_HIGH_SECRET = "wh_c56bNZmrou9srMqfqRxttZQzyi_CQ2NrYEWmz-54Bgk";
-const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/6";
-const WEBHOOK_LOW_SECRET  = "wh_RqCEekRLnRDcYvzmMh9EpR6m6r51oym7g7a8gWDates";
+const WEBHOOK_HIGH        = "https://prosaas.pro/api/webhook/leads/11";
+const WEBHOOK_HIGH_SECRET = "wh_ATHHsbMsQ-6zLWe1HYn5TWJ7bDGnA4CO1qOSAQxBUHU";
+const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/12";
+const WEBHOOK_LOW_SECRET  = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
 
 // ---- Questions ----
 const QUESTIONS = [
