@@ -153,16 +153,27 @@
       <div class="quiz-wrapper" role="main">
         <!-- Step: Questions -->
         <div id="quiz-step" class="quiz-card">
+          <!-- Important banner -->
+          <div class="quiz-banner" role="note">
+            <span class="quiz-banner-icon" aria-hidden="true">👇</span>
+            <div class="quiz-banner-text">
+              <strong>חשוב מאוד:</strong>
+              כל השאלות מתייחסות ל־6 השנים האחרונות — גם אם המצב השתנה היום.
+              יש לענות גם עבור בן/בת הזוג במידה ויש.
+              מילוי מדויק יכול להשפיע משמעותית על גובה ההחזר שמגיע לך 💰
+            </div>
+          </div>
+
           <div class="quiz-header">
             <div class="quiz-badge">
               <span aria-hidden="true">📋</span> בדיקת זכאות להחזר מס
             </div>
             <h2 id="quiz-heading" class="quiz-title">שאלון זכאות</h2>
-            <div class="progress-bar-wrapper" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="8" aria-label="התקדמות השאלון" id="progress-bar-wrapper">
+            <div class="progress-bar-wrapper" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="13" aria-label="התקדמות השאלון" id="progress-bar-wrapper">
               <div class="progress-bar-track">
                 <div class="progress-bar-fill" id="progress-fill"></div>
               </div>
-              <div class="progress-label" id="progress-label">שאלה 1 מתוך 8</div>
+              <div class="progress-label" id="progress-label">שאלה 1 מתוך 13</div>
             </div>
           </div>
 
@@ -175,6 +186,16 @@
               ← חזור
             </button>
           </div>
+        </div>
+
+        <!-- Step: Self-Employed Stop -->
+        <div id="self-employed-stop" class="quiz-card self-employed-card" style="display:none;" aria-live="polite">
+          <div class="self-employed-icon" aria-hidden="true">😊</div>
+          <h2 class="self-employed-title">תודה שפנית אלינו!</h2>
+          <p class="self-employed-text">
+            כרגע אנו מטפלים בהחזרי מס לשכירים בלבד 😊<br />
+            נציג מטעמנו יחזור אליך במידת הצורך.
+          </p>
         </div>
 
         <!-- Step: Form -->
@@ -264,17 +285,15 @@
 
         <!-- Step: Thank You -->
         <div id="thankyou-step" class="quiz-card thankyou-card" style="display:none;" aria-live="polite">
-          <div class="thankyou-icon" aria-hidden="true">✅</div>
-          <h2 class="thankyou-title">הפנייה התקבלה בהצלחה!</h2>
+          <div class="thankyou-icon" aria-hidden="true">🎉</div>
+          <h2 class="thankyou-title">תודה! הבדיקה הראשונית שלך התקבלה בהצלחה.</h2>
           <p class="thankyou-text">
-            הנציג הדיגיטלי שלנו ישלח לכם הודעה <strong>מיידית</strong> להמשך התהליך.<br />
-            הבדיקה <strong>בחינם לחלוטין</strong> וללא עלות פתיחת תיק!
+            <strong>לפי הנתונים שמילאת יש לך פוטנציאל גבוה להחזר מס!</strong>
           </p>
           <div class="thankyou-info-box thankyou-info-box--instant">
             <span aria-hidden="true">💬</span>
-            <span>זמן המתנה: <strong>מיידי</strong> – ההודעה בדרך אליכם!</span>
+            <span>ברגעים אלה נשלחה אלייך הודעת וואטסאפ להמשך התהליך.</span>
           </div>
-          <p class="thankyou-small">תודה שבחרתם במרכז הארצי לזכויות מס!</p>
         </div>
       </div>
     </div>
