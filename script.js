@@ -1,6 +1,5 @@
 /* =========================================================
    המרכז הארצי לזכויות מס – script.js
-   Questionnaire, Score, Webhooks, Form, Accessibility
    ========================================================= */
 
 "use strict";
@@ -11,186 +10,424 @@ const WEBHOOK_HIGH_SECRET = "wh_ATHHsbMsQ-6zLWe1HYn5TWJ7bDGnA4CO1qOSAQxBUHU";
 const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/12";
 const WEBHOOK_LOW_SECRET  = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
 
-// ---- Questions ----
-const QUESTIONS = [
+// ---- Steps ----
+const STEPS = [
   {
-    key: "salary_over_8000",
-    text: "האם את/ה או בן/ת הזוג שלך עובד/ת כשכיר/ה והשכר החודשי הוא 8,000 ₪ ומעלה?",
+    id: "family_status",
+    question: "מה מצבך המשפחתי?",
+    type: "radio",
+    options: ["רווק/ה", "נשוי/אה", "ידוע/ה בציבור", "גרוש/ה", "אלמן/ה"],
   },
   {
-    key: "private_insurance",
-    text: "האם אתם משלמים על ביטוחים פרטיים (בריאות, חיים) מעל 150 ₪ בחודש?",
+    id: "spouse_age",
+    question: "מה טווח הגיל של בן/בת הזוג?",
+    type: "radio",
+    options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
+    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
   },
   {
-    key: "pension_tax",
-    text: "האם משכתם כסף מפנסיה / קרן השתלמות ושולם עליו מס של 35%?",
+    id: "age_range",
+    question: "מה טווח הגיל שלך?",
+    type: "radio",
+    options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
   },
   {
-    key: "changed_job",
-    text: "האם שיניתם מקום עבודה בשש השנים האחרונות?",
+    id: "employment_status",
+    question: "מה המצב התעסוקתי שלך כיום?",
+    type: "radio",
+    options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
+    stopIf: (a) => a.employment_status === "עצמאי/ת",
   },
   {
-    key: "children",
-    text: "האם יש לכם ילדים מתחת לגיל 18?",
+    id: "spouse_employment",
+    question: "מה המצב התעסוקתי של בן/בת הזוג כיום?",
+    type: "radio",
+    options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
+    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
+    stopIf: (a) => a.spouse_employment === "עצמאי/ת",
   },
   {
-    key: "income_tax",
-    text: "האם יורד לכם מס הכנסה מהשכר מדי חודש?",
+    id: "life_events",
+    question: "האם ב־6 השנים האחרונות לך או לבן/ת הזוג קרה אחד או יותר מהדברים הבאים?",
+    subtext: "ניתן לבחור כמה תשובות",
+    type: "checkbox",
+    options: [
+      "החלפת עבודה",
+      "עבודה ב־2 מקומות במקביל",
+      "לא עשיתי תיאום מס",
+      "חופשת לידה",
+      'אבטלה / חל"ת',
+      "מילואים",
+      "משיכת פנסיה / קרן השתלמות עם מס",
+      "תקופה ללא עבודה",
+      "אף אחד מהם",
+    ],
+    noneOption: "אף אחד מהם",
   },
   {
-    key: "changed_address",
-    text: "האם שיניתם כתובת מגורים בשש השנים האחרונות?",
+    id: "personal_circumstances",
+    question: "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/ת הזוג?",
+    subtext: "ניתן לבחור כמה תשובות",
+    type: "checkbox",
+    options: [
+      "ילדים מתחת לגיל 18",
+      "ילד עם לקות למידה / קצבה / ועדת זכאות",
+      "תשלום מזונות",
+      "סיום תואר / לימודי מקצוע",
+      "חייל משוחרר",
+      "שינוי מצב משפחתי (גירושין / נישואין)",
+      "אף אחד מהם",
+    ],
+    noneOption: "אף אחד מהם",
   },
   {
-    key: "donations",
-    text: "האם יש לכם קבלות על תרומות לעמותות מוכרות?",
+    id: "financial_circumstances",
+    question: "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/ת הזוג?",
+    subtext: "ניתן לבחור כמה תשובות",
+    options: [
+      "השקעות בשוק ההון / מניות",
+      "ביטוח חיים / משכנתא / בריאות פרטי",
+      "תרומות עם קבלות",
+      "מגורים ביישוב מזכה",
+      "עבודה ממשלתית / עירייה / גוף ציבורי",
+      "מכירת דירה / מגרש ותשלום מס שבח",
+      "אף אחד מהם",
+    ],
+    type: "checkbox",
+    noneOption: "אף אחד מהם",
+  },
+  {
+    id: "tax_deducted",
+    question: "האם נוכה לך או לבן/ת הזוג מס בתלושי השכר ב־6 השנים האחרונות?",
+    type: "radio",
+    options: ["כן", "לא", "לא יודע"],
+  },
+  {
+    id: "salary_over_8000",
+    question: "האם השכר שלך מעל 8,000 ₪ בחודש?",
+    type: "radio",
+    options: ["כן", "לא"],
+  },
+  {
+    id: "spouse_salary_over_8000",
+    question: "האם השכר של בן/בת הזוג מעל 8,000 ₪?",
+    type: "radio",
+    options: ["כן", "לא"],
+    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
+  },
+  {
+    id: "previous_tax_check",
+    question: "האם ביצעת בדיקת / החזר מס ב־12 החודשים האחרונים?",
+    type: "radio",
+    options: ["כן", "לא"],
+  },
+  {
+    id: "previous_tax_years",
+    question: "האם ההחזר בוצע על כל השנים או רק על חלק מהשנים?",
+    type: "radio",
+    options: ["כל השנים", "רק חלק מהשנים", "לא יודע"],
+    condition: (a) => a.previous_tax_check === "כן",
   },
 ];
 
-// ---- State ----
-const answers = {
-  salary_over_8000: null,
-  private_insurance: null,
-  pension_tax: null,
-  changed_job: null,
-  children: null,
-  income_tax: null,
-  changed_address: null,
-  donations: null,
-};
+// ---- Feedback Messages ----
+const FEEDBACK_MESSAGES = [
+  "וואו, זה נשמע מבטיח מאוד! 🔥",
+  "מצוין! כל פרט מקרב אותנו לתוצאה 💪",
+  "נראה שיש כאן פוטנציאל אמיתי! ✨",
+  "כל הכבוד! המידע הזה ממש עוזר לנו 🎯",
+  "מעולה! התמונה מתחילה להתבהר 📊",
+  "נראה ממש טוב! אנחנו על הדרך הנכונה 🚀",
+  "מדהים! כל שאלה חושפת עוד פוטנציאל 💡",
+  "אחלה! כל פרט מחזק את הבדיקה שלך 💫",
+  "מצוין! נראה שזה הולך להיות מעניין 🤩",
+  "כן! זה בדיוק מה שהיינו צריכים לדעת ⚡",
+  "מדליק! ממשיכים לבדיקה המלאה 🏆",
+  "נראה מצוין! כמעט שם 🎉",
+];
 
-let currentQuestion = 0;
+// ---- State ----
+const answers = {};
+let currentStepIndex = 0;
+let stepHistory = [];
 let isSubmitting = false;
 
-// ---- Accessibility text-size labels ----
+// ---- A11Y labels ----
 const A11Y_SIZE_LABELS = ["רגיל", "גדול", "גדול מאוד"];
 
 // ---- DOM refs ----
-const quizStep    = document.getElementById("quiz-step");
-const formStep    = document.getElementById("form-step");
-const thankyouStep = document.getElementById("thankyou-step");
-const questionArea = document.getElementById("question-area");
-const progressFill = document.getElementById("progress-fill");
-const progressLabel = document.getElementById("progress-label");
-const progressWrapper = document.getElementById("progress-bar-wrapper");
-const btnBack      = document.getElementById("btn-back");
-const leadForm     = document.getElementById("lead-form");
-const btnSubmit    = document.getElementById("btn-submit");
+const quizStep         = document.getElementById("quiz-step");
+const formStep         = document.getElementById("form-step");
+const thankyouStep     = document.getElementById("thankyou-step");
+const selfEmployedStop = document.getElementById("self-employed-stop");
+const questionArea     = document.getElementById("question-area");
+const progressFill     = document.getElementById("progress-fill");
+const progressLabel    = document.getElementById("progress-label");
+const progressWrapper  = document.getElementById("progress-bar-wrapper");
+const btnBack          = document.getElementById("btn-back");
+const leadForm         = document.getElementById("lead-form");
+const btnSubmit        = document.getElementById("btn-submit");
 const btnSubmitText    = document.getElementById("btn-submit-text");
 const btnSubmitLoading = document.getElementById("btn-submit-loading");
 
-// ---- Calculate Score ----
+// ---- Helpers ----
+function getVisibleSteps() {
+  return STEPS.filter((s) => !s.condition || s.condition(answers));
+}
+
+function getVisiblePosition(stepIdx) {
+  let count = 0;
+  for (let i = 0; i <= stepIdx; i++) {
+    if (!STEPS[i].condition || STEPS[i].condition(answers)) count++;
+  }
+  return count;
+}
+
+function getNextStepIndex(fromIdx) {
+  for (let i = fromIdx + 1; i < STEPS.length; i++) {
+    if (!STEPS[i].condition || STEPS[i].condition(answers)) return i;
+  }
+  return -1;
+}
+
+function getRandomFeedback() {
+  return FEEDBACK_MESSAGES[Math.floor(Math.random() * FEEDBACK_MESSAGES.length)];
+}
+
+// ---- Score Calculation ----
 function calcScore() {
   let score = 0;
-  if (answers.salary_over_8000) score += 3;
-  if (answers.private_insurance) score += 1;
-  if (answers.pension_tax)       score += 1;
-  if (answers.changed_job)       score += 1;
-  if (answers.children)          score += 1;
-  if (answers.income_tax)        score += 2;
-  if (answers.changed_address)   score += 1;
-  if (answers.donations)         score += 1;
+  if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן") score += 3;
+  if (answers.tax_deducted === "כן") score += 2;
+
+  const life = answers.life_events || [];
+  if (life.includes("החלפת עבודה")) score += 1;
+  if (life.includes("עבודה ב־2 מקומות במקביל")) score += 1;
+  if (life.includes("לא עשיתי תיאום מס")) score += 1;
+  if (life.includes("חופשת לידה")) score += 1;
+  if (life.includes("משיכת פנסיה / קרן השתלמות עם מס")) score += 1;
+
+  const personal = answers.personal_circumstances || [];
+  if (personal.includes("ילדים מתחת לגיל 18")) score += 1;
+  if (personal.includes("ילד עם לקות למידה / קצבה / ועדת זכאות")) score += 1;
+  if (personal.includes("חייל משוחרר")) score += 1;
+  if (personal.includes("סיום תואר / לימודי מקצוע")) score += 1;
+
+  const financial = answers.financial_circumstances || [];
+  if (financial.includes("ביטוח חיים / משכנתא / בריאות פרטי")) score += 1;
+  if (financial.includes("תרומות עם קבלות")) score += 1;
+  if (financial.includes("השקעות בשוק ההון / מניות")) score += 1;
+  if (financial.includes("מכירת דירה / מגרש ותשלום מס שבח")) score += 1;
+  if (financial.includes("מגורים ביישוב מזכה")) score += 1;
+
   return score;
 }
 
-// ---- Determine Webhook ----
-// HIGH  → customer answered YES to Q1 (salary_over_8000) OR Q2 (private_insurance), or both
-// LOW   → customer answered NO to BOTH Q1 and Q2 (regardless of all other answers)
+// ---- Determine Webhook (HIGH / LOW) ----
+// HIGH  → salary_over_8000 OR spouse_salary_over_8000 OR private insurance
+// LOW   → everything else
 function getWebhookConfig() {
-  if (answers.salary_over_8000 || answers.private_insurance) {
+  const financial = answers.financial_circumstances || [];
+  const hasInsurance = financial.includes("ביטוח חיים / משכנתא / בריאות פרטי");
+
+  if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן" || hasInsurance) {
     return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
   }
   return { webhookUrl: WEBHOOK_LOW, secret: WEBHOOK_LOW_SECRET };
 }
 
-// ---- Render question ----
-function renderQuestion(index) {
-  const q = QUESTIONS[index];
+// ---- Update Progress Bar ----
+function updateProgress(stepIdx) {
+  const total = getVisibleSteps().length;
+  const current = getVisiblePosition(stepIdx);
+  const percent = Math.round(((current - 1) / total) * 100);
+  progressFill.style.width = percent + "%";
+  progressLabel.textContent = `שאלה ${current} מתוך ${total}`;
+  progressWrapper.setAttribute("aria-valuenow", current);
+  progressWrapper.setAttribute("aria-valuemax", total);
+}
+
+// ---- Show Feedback Toast ----
+function showFeedback(msg) {
+  const old = questionArea.querySelector(".feedback-toast");
+  if (old) old.remove();
+
+  const el = document.createElement("div");
+  el.className = "feedback-toast";
+  el.setAttribute("aria-live", "polite");
+  el.textContent = msg;
+  questionArea.appendChild(el);
+  // CSS handles fade-in / fade-out via animation
+}
+
+// ---- Render Question ----
+function renderQuestion(idx) {
+  const step = STEPS[idx];
+  questionArea.innerHTML = "";
+  updateProgress(idx);
+  btnBack.style.display = stepHistory.length > 0 ? "inline-flex" : "none";
+
   const block = document.createElement("div");
   block.className = "question-block";
-  block.setAttribute("aria-live", "polite");
 
-  block.innerHTML = `
-    <p class="question-text" id="q-text-${index}">${q.text}</p>
-    <div class="answer-btns" role="group" aria-labelledby="q-text-${index}">
-      <button class="answer-btn yes-btn" data-answer="true" aria-label="כן – ${q.text}">כן</button>
-      <button class="answer-btn no-btn" data-answer="false" aria-label="לא – ${q.text}">לא</button>
-    </div>
-  `;
-
-  // Clear and inject
-  questionArea.innerHTML = "";
-  questionArea.appendChild(block);
-
-  // Back button visibility
-  btnBack.style.display = index > 0 ? "inline-flex" : "none";
-
-  // Progress
-  updateProgress(index);
-
-  // Attach handlers
-  block.querySelectorAll(".answer-btn").forEach((btn) => {
-    btn.addEventListener("click", handleAnswer);
-    btn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleAnswer.call(btn, e);
-      }
+  if (step.type === "radio") {
+    block.innerHTML = `
+      <p class="question-text" id="q-text-${idx}">${step.question}</p>
+      <div class="answer-options" role="group" aria-labelledby="q-text-${idx}">
+        ${step.options
+          .map(
+            (opt) => `
+          <button class="answer-option-btn" data-value="${opt}" aria-label="${opt}">${opt}</button>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+    questionArea.appendChild(block);
+    block.querySelectorAll(".answer-option-btn").forEach((btn) => {
+      btn.addEventListener("click", () => handleRadioAnswer(idx, btn.dataset.value));
     });
-  });
-}
+  } else {
+    // checkbox
+    const saved = answers[step.id] || [];
+    block.innerHTML = `
+      <p class="question-text" id="q-text-${idx}">${step.question}</p>
+      ${step.subtext ? `<p class="question-subtext">${step.subtext}</p>` : ""}
+      <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
+        ${step.options
+          .map(
+            (opt) => `
+          <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}">
+            <input type="checkbox" value="${opt}"${saved.includes(opt) ? " checked" : ""} />
+            <span class="checkbox-label">${opt}</span>
+          </label>
+        `
+          )
+          .join("")}
+      </div>
+      <button class="btn btn-primary btn-continue" id="btn-continue">המשך ←</button>
+    `;
+    questionArea.appendChild(block);
 
-// ---- Update progress bar ----
-function updateProgress(index) {
-  const percent = Math.round((index / QUESTIONS.length) * 100);
-  progressFill.style.width = percent + "%";
-  progressLabel.textContent = `שאלה ${index + 1} מתוך ${QUESTIONS.length}`;
-  progressWrapper.setAttribute("aria-valuenow", index + 1);
-}
+    const checkboxes = block.querySelectorAll('input[type="checkbox"]');
+    const noneOpt = step.noneOption;
 
-// ---- Handle answer click ----
-function handleAnswer(e) {
-  const btn = e.currentTarget || this;
-  const raw = btn.dataset.answer;
-  const value = raw === "true";
-
-  // Disable both buttons immediately and mark the chosen one
-  const parent = btn.closest(".answer-btns");
-  if (parent) {
-    parent.querySelectorAll(".answer-btn").forEach((b) => {
-      b.disabled = true;
+    checkboxes.forEach((cb) => {
+      cb.addEventListener("change", () => {
+        if (noneOpt && cb.value === noneOpt && cb.checked) {
+          checkboxes.forEach((o) => {
+            if (o !== cb) {
+              o.checked = false;
+              o.closest(".checkbox-option").classList.remove("selected");
+            }
+          });
+        } else if (noneOpt && cb.value !== noneOpt && cb.checked) {
+          checkboxes.forEach((o) => {
+            if (o.value === noneOpt) {
+              o.checked = false;
+              o.closest(".checkbox-option").classList.remove("selected");
+            }
+          });
+        }
+        cb.closest(".checkbox-option").classList.toggle("selected", cb.checked);
+      });
     });
+
+    block.querySelector("#btn-continue").addEventListener("click", () => handleCheckboxAnswer(idx));
   }
-  btn.classList.add("selected");
-
-  // Store answer
-  const key = QUESTIONS[currentQuestion].key;
-  answers[key] = value;
-
-  // Advance after a brief moment so the user sees their selection
-  setTimeout(() => {
-    currentQuestion++;
-    if (currentQuestion < QUESTIONS.length) {
-      renderQuestion(currentQuestion);
-    } else {
-      showFormStep();
-    }
-  }, 280);
 }
 
-// ---- Show form step ----
+// ---- Handle Radio Answer ----
+function handleRadioAnswer(stepIdx, value) {
+  const step = STEPS[stepIdx];
+
+  // Mark selected & disable
+  questionArea.querySelectorAll(".answer-option-btn").forEach((b) => {
+    b.disabled = true;
+    if (b.dataset.value === value) b.classList.add("selected");
+  });
+
+  answers[step.id] = value;
+  showFeedback(getRandomFeedback());
+
+  setTimeout(() => {
+    if (step.stopIf && step.stopIf(answers)) {
+      showSelfEmployedStop();
+      return;
+    }
+    stepHistory.push(stepIdx);
+    const next = getNextStepIndex(stepIdx);
+    if (next === -1) {
+      showFormStep();
+    } else {
+      currentStepIndex = next;
+      renderQuestion(next);
+    }
+  }, 700);
+}
+
+// ---- Handle Checkbox Answer ----
+function handleCheckboxAnswer(stepIdx) {
+  const step = STEPS[stepIdx];
+  const checked = Array.from(questionArea.querySelectorAll('input[type="checkbox"]:checked')).map(
+    (cb) => cb.value
+  );
+
+  if (checked.length === 0) {
+    let hint = questionArea.querySelector(".checkbox-hint");
+    if (!hint) {
+      hint = document.createElement("p");
+      hint.className = "checkbox-hint";
+      hint.textContent = "נא לבחור לפחות תשובה אחת";
+      const continueBtn = questionArea.querySelector("#btn-continue");
+      continueBtn.insertAdjacentElement("beforebegin", hint);
+    }
+    return;
+  }
+
+  answers[step.id] = checked;
+  const continueBtn = questionArea.querySelector("#btn-continue");
+  if (continueBtn) continueBtn.disabled = true;
+
+  showFeedback(getRandomFeedback());
+
+  setTimeout(() => {
+    stepHistory.push(stepIdx);
+    const next = getNextStepIndex(stepIdx);
+    if (next === -1) {
+      showFormStep();
+    } else {
+      currentStepIndex = next;
+      renderQuestion(next);
+    }
+  }, 700);
+}
+
+// ---- Show Self-Employed Stop ----
+function showSelfEmployedStop() {
+  quizStep.style.display = "none";
+  selfEmployedStop.style.display = "block";
+  selfEmployedStop.removeAttribute("aria-hidden");
+
+  const heading = selfEmployedStop.querySelector("h2");
+  if (heading) {
+    heading.setAttribute("tabindex", "-1");
+    heading.focus();
+  }
+
+  const section = document.getElementById("questionnaire");
+  if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+// ---- Show Form Step ----
 function showFormStep() {
-  // Progress: 100%
   progressFill.style.width = "100%";
   progressLabel.textContent = "כמעט סיימנו!";
-  progressWrapper.setAttribute("aria-valuenow", QUESTIONS.length);
 
-  // Transition
   quizStep.style.display = "none";
   formStep.style.display = "block";
   formStep.removeAttribute("aria-hidden");
 
-  // Focus the form heading
   const heading = formStep.querySelector(".quiz-title");
   if (heading) {
     heading.setAttribute("tabindex", "-1");
@@ -198,14 +435,13 @@ function showFormStep() {
   }
 }
 
-// ---- Back button ----
+// ---- Back Button ----
 btnBack.addEventListener("click", () => {
-  if (currentQuestion > 0) {
-    currentQuestion--;
-    // Un-set the answer we're going back to
-    const key = QUESTIONS[currentQuestion].key;
-    answers[key] = null;
-    renderQuestion(currentQuestion);
+  if (stepHistory.length > 0) {
+    const prevIdx = stepHistory.pop();
+    delete answers[STEPS[currentStepIndex].id];
+    currentStepIndex = prevIdx;
+    renderQuestion(prevIdx);
   }
 });
 
@@ -216,13 +452,11 @@ function validateForm() {
   const phoneInput      = document.getElementById("field-phone");
   const consentCheckbox = document.getElementById("consent-checkbox");
 
-  // Reset errors
   document.getElementById("name-error").textContent    = "";
   document.getElementById("phone-error").textContent   = "";
   document.getElementById("consent-error").textContent = "";
   [nameInput, phoneInput, consentCheckbox].forEach((el) => el.classList.remove("error"));
 
-  // Name
   const nameVal = nameInput.value.trim();
   if (!nameVal) {
     document.getElementById("name-error").textContent = "נא להזין שם מלא";
@@ -234,7 +468,6 @@ function validateForm() {
     valid = false;
   }
 
-  // Phone – Israeli mobile / landline basic pattern
   const phoneVal = phoneInput.value.trim().replace(/[-\s]/g, "");
   if (!phoneVal) {
     document.getElementById("phone-error").textContent = "נא להזין מספר טלפון";
@@ -246,7 +479,6 @@ function validateForm() {
     valid = false;
   }
 
-  // Consent checkbox – must be checked
   if (!consentCheckbox.checked) {
     document.getElementById("consent-error").textContent = "יש לאשר את ההצהרה לפני השליחה";
     consentCheckbox.classList.add("error");
@@ -259,7 +491,6 @@ function validateForm() {
 // ---- Form Submit ----
 leadForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-
   if (isSubmitting) return;
   if (!validateForm()) return;
 
@@ -282,29 +513,18 @@ leadForm.addEventListener("submit", async (e) => {
     timestamp: new Date().toISOString(),
   };
 
-  // Build URL with secret as query param so it reaches the server even in no-cors mode
-  // (no-cors prevents CORS preflight; Authorization header would be dropped by the browser)
   const sendUrl = new URL(webhookUrl);
   sendUrl.searchParams.set("secret", secret);
 
   try {
-    // First attempt: standard JSON with X-Webhook-Secret header.
-    // Works when the server has CORS configured correctly.
     const res = await fetch(webhookUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Webhook-Secret": secret,
-      },
+      headers: { "Content-Type": "application/json", "X-Webhook-Secret": secret },
       body: JSON.stringify(payload),
       keepalive: true,
     });
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-  } catch (_corsOrHttpErr) {
-    // Fallback: no-cors ensures the POST always reaches the server without preflight.
-    // Secret is in the URL; body is the raw JSON string.
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  } catch (_) {
     try {
       await fetch(sendUrl.toString(), {
         method: "POST",
@@ -333,11 +553,8 @@ function showThankyou() {
     heading.focus();
   }
 
-  // Scroll to top of quiz area
-  const quizSection = document.getElementById("questionnaire");
-  if (quizSection) {
-    quizSection.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+  const section = document.getElementById("questionnaire");
+  if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // ---- FAQ Accordion ----
@@ -348,7 +565,6 @@ function initFAQ() {
       const answerId = btn.getAttribute("aria-controls");
       const answerEl = document.getElementById(answerId);
 
-      // Collapse all
       document.querySelectorAll(".faq-question").forEach((b) => {
         b.setAttribute("aria-expanded", "false");
         const id = b.getAttribute("aria-controls");
@@ -356,7 +572,6 @@ function initFAQ() {
         if (el) el.hidden = true;
       });
 
-      // Toggle current
       if (!expanded) {
         btn.setAttribute("aria-expanded", "true");
         if (answerEl) answerEl.hidden = false;
@@ -369,52 +584,36 @@ function initFAQ() {
 const a11yToggle = document.getElementById("a11y-toggle");
 const a11yPanel  = document.getElementById("a11y-panel");
 
-let a11yState = {
-  textLevel: 0,    // 0 = normal, 1 = large, 2 = xl
-  contrast: false,
-  links: false,
-  noAnim: false,
-};
+let a11yState = { textLevel: 0, contrast: false, links: false, noAnim: false };
 
 function saveA11yState() {
-  try {
-    localStorage.setItem("ntrc_a11y_state", JSON.stringify(a11yState));
-  } catch (_) {}
+  try { localStorage.setItem("ntrc_a11y_state", JSON.stringify(a11yState)); } catch (_) {}
 }
 
 function loadA11yState() {
   try {
     const saved = localStorage.getItem("ntrc_a11y_state");
     if (saved) {
-      const parsed = JSON.parse(saved);
-      a11yState = { ...a11yState, ...parsed };
+      a11yState = { ...a11yState, ...JSON.parse(saved) };
       applyA11yState();
     }
   } catch (_) {}
 }
 
 function applyA11yState() {
-  const body = document.body;
   const html = document.documentElement;
-
-  // Text – must target html so rem units (relative to html) scale correctly
   html.classList.remove("a11y-text-lg", "a11y-text-xl");
   if (a11yState.textLevel === 1) html.classList.add("a11y-text-lg");
   if (a11yState.textLevel === 2) html.classList.add("a11y-text-xl");
 
-  // Contrast
-  body.classList.toggle("a11y-contrast", a11yState.contrast);
-  // Links
-  body.classList.toggle("a11y-links", a11yState.links);
-  // Animations
-  body.classList.toggle("a11y-no-anim", a11yState.noAnim);
+  document.body.classList.toggle("a11y-contrast", a11yState.contrast);
+  document.body.classList.toggle("a11y-links", a11yState.links);
+  document.body.classList.toggle("a11y-no-anim", a11yState.noAnim);
 
-  // Update button active states and aria-checked
   toggleBtnActive("a11y-contrast", a11yState.contrast);
   toggleBtnActive("a11y-links", a11yState.links);
   toggleBtnActive("a11y-animations", a11yState.noAnim);
 
-  // Update text-size control
   const indicator = document.getElementById("a11y-size-display");
   if (indicator) indicator.textContent = A11Y_SIZE_LABELS[a11yState.textLevel] || A11Y_SIZE_LABELS[0];
 
@@ -428,30 +627,25 @@ function toggleBtnActive(id, active) {
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.toggle("active", active);
-  if (el.getAttribute("role") === "switch") {
-    el.setAttribute("aria-checked", active ? "true" : "false");
-  }
+  if (el.getAttribute("role") === "switch") el.setAttribute("aria-checked", active ? "true" : "false");
 }
 
 const FOCUSABLE_SELECTOR = "button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex='-1'])";
+let panelFocusable = [];
 
-// Toggle panel
 a11yToggle.addEventListener("click", () => {
   const isOpen = a11yPanel.classList.toggle("open");
   a11yToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
   a11yToggle.setAttribute("aria-label", isOpen ? "סגור תפריט נגישות" : "פתח תפריט נגישות");
   a11yPanel.setAttribute("aria-hidden", isOpen ? "false" : "true");
   if (isOpen) {
+    panelFocusable = Array.from(a11yPanel.querySelectorAll(FOCUSABLE_SELECTOR));
     const closeBtn = document.getElementById("a11y-close");
     if (closeBtn) closeBtn.focus();
-    else {
-      const firstBtn = a11yPanel.querySelector("button");
-      if (firstBtn) firstBtn.focus();
-    }
+    else { const first = a11yPanel.querySelector("button"); if (first) first.focus(); }
   }
 });
 
-// Close button (inside panel header)
 document.getElementById("a11y-close").addEventListener("click", () => {
   a11yPanel.classList.remove("open");
   a11yToggle.setAttribute("aria-expanded", "false");
@@ -460,7 +654,6 @@ document.getElementById("a11y-close").addEventListener("click", () => {
   a11yToggle.focus();
 });
 
-// Close panel on Escape
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && a11yPanel.classList.contains("open")) {
     a11yPanel.classList.remove("open");
@@ -471,74 +664,42 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// Focus trap – keep keyboard focus inside the panel while it is open.
-// Focusable elements are cached on open (panel content never changes dynamically).
-let panelFocusable = [];
-a11yToggle.addEventListener("click", () => {
-  if (a11yPanel.classList.contains("open")) {
-    panelFocusable = Array.from(a11yPanel.querySelectorAll(FOCUSABLE_SELECTOR));
-  }
-});
-
 a11yPanel.addEventListener("keydown", (e) => {
   if (e.key !== "Tab" || !panelFocusable.length) return;
   const first = panelFocusable[0];
   const last  = panelFocusable[panelFocusable.length - 1];
-  if (e.shiftKey) {
-    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-  } else {
-    if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
-  }
+  if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+  else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
 });
 
-// Close on outside click
 document.addEventListener("click", (e) => {
-  if (!a11yPanel.contains(e.target) && e.target !== a11yToggle) {
-    if (a11yPanel.classList.contains("open")) {
-      a11yPanel.classList.remove("open");
-      a11yToggle.setAttribute("aria-expanded", "false");
-      a11yToggle.setAttribute("aria-label", "פתח תפריט נגישות");
-      a11yPanel.setAttribute("aria-hidden", "true");
-    }
+  if (!a11yPanel.contains(e.target) && e.target !== a11yToggle && a11yPanel.classList.contains("open")) {
+    a11yPanel.classList.remove("open");
+    a11yToggle.setAttribute("aria-expanded", "false");
+    a11yToggle.setAttribute("aria-label", "פתח תפריט נגישות");
+    a11yPanel.setAttribute("aria-hidden", "true");
   }
 });
 
-// Accessibility controls
 document.getElementById("a11y-increase-text").addEventListener("click", () => {
-  a11yState.textLevel = Math.min(a11yState.textLevel + 1, 2);
-  applyA11yState();
-  saveA11yState();
+  a11yState.textLevel = Math.min(a11yState.textLevel + 1, 2); applyA11yState(); saveA11yState();
 });
-
 document.getElementById("a11y-decrease-text").addEventListener("click", () => {
-  a11yState.textLevel = Math.max(a11yState.textLevel - 1, 0);
-  applyA11yState();
-  saveA11yState();
+  a11yState.textLevel = Math.max(a11yState.textLevel - 1, 0); applyA11yState(); saveA11yState();
 });
-
 document.getElementById("a11y-contrast").addEventListener("click", () => {
-  a11yState.contrast = !a11yState.contrast;
-  applyA11yState();
-  saveA11yState();
+  a11yState.contrast = !a11yState.contrast; applyA11yState(); saveA11yState();
 });
-
 document.getElementById("a11y-links").addEventListener("click", () => {
-  a11yState.links = !a11yState.links;
-  applyA11yState();
-  saveA11yState();
+  a11yState.links = !a11yState.links; applyA11yState(); saveA11yState();
 });
-
 document.getElementById("a11y-animations").addEventListener("click", () => {
-  a11yState.noAnim = !a11yState.noAnim;
-  applyA11yState();
-  saveA11yState();
+  a11yState.noAnim = !a11yState.noAnim; applyA11yState(); saveA11yState();
 });
-
 document.getElementById("a11y-reset").addEventListener("click", () => {
   a11yState = { textLevel: 0, contrast: false, links: false, noAnim: false };
   document.documentElement.classList.remove("a11y-text-lg", "a11y-text-xl");
-  applyA11yState();
-  saveA11yState();
+  applyA11yState(); saveA11yState();
 });
 
 // ---- Footer year ----
@@ -552,7 +713,6 @@ function init() {
   loadA11yState();
 }
 
-// Run on DOM ready
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init);
 } else {
