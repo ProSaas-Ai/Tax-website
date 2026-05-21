@@ -22,7 +22,7 @@ const STEPS = [
     question: "מה המצב המשפחתי שלך?",
     type: "radio",
     options: ["רווק/ה", "נשוי/אה", "ידוע/ה בציבור", "גרוש/ה", "אלמן/ה"],
-    optionEmojis: ["😊", "💍", "🤝", "📋", "💙"],
+    optionEmojis: ["😊", "💍", "🤝", "👤", "💙"],
   },
   {
     id: "age_range",
