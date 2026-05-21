@@ -11,23 +11,21 @@ const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/12";
 const WEBHOOK_LOW_SECRET  = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
 
 // ---- Steps ----
+const HAS_PARTNER = (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור";
+
 const STEPS = [
   {
     id: "family_status",
-    question: "מה מצבך המשפחתי?",
+    question: "מה המצב המשפחתי שלך?",
     type: "radio",
     options: ["רווק/ה", "נשוי/אה", "ידוע/ה בציבור", "גרוש/ה", "אלמן/ה"],
   },
   {
-    id: "spouse_age",
-    question: "מה טווח הגיל של בן/בת הזוג?",
-    type: "radio",
-    options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
-    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
-  },
-  {
     id: "age_range",
-    question: "מה טווח הגיל שלך?",
+    question: (a) =>
+      HAS_PARTNER(a)
+        ? "מה טווח הגילאים שלך ושל בן/בת הזוג?"
+        : "מה טווח הגיל שלך?",
     type: "radio",
     options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
   },
@@ -36,19 +34,20 @@ const STEPS = [
     question: "מה המצב התעסוקתי שלך כיום?",
     type: "radio",
     options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
-    stopIf: (a) => a.employment_status === "עצמאי/ת",
   },
   {
     id: "spouse_employment",
     question: "מה המצב התעסוקתי של בן/בת הזוג כיום?",
     type: "radio",
     options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
-    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
-    stopIf: (a) => a.spouse_employment === "עצמאי/ת",
+    condition: (a) => HAS_PARTNER(a),
   },
   {
     id: "life_events",
-    question: "האם ב־6 השנים האחרונות לך או לבן/ת הזוג קרה אחד או יותר מהדברים הבאים?",
+    question: (a) =>
+      HAS_PARTNER(a)
+        ? "האם ב־6 השנים האחרונות קרה לך או לבן/בת הזוג אחד או יותר מהדברים הבאים?"
+        : "האם ב־6 השנים האחרונות קרה לך אחד או יותר מהדברים הבאים?",
     subtext: "ניתן לבחור כמה תשובות",
     type: "checkbox",
     options: [
@@ -66,7 +65,10 @@ const STEPS = [
   },
   {
     id: "personal_circumstances",
-    question: "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/ת הזוג?",
+    question: (a) =>
+      HAS_PARTNER(a)
+        ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
+        : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
     subtext: "ניתן לבחור כמה תשובות",
     type: "checkbox",
     options: [
@@ -82,7 +84,10 @@ const STEPS = [
   },
   {
     id: "financial_circumstances",
-    question: "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/ת הזוג?",
+    question: (a) =>
+      HAS_PARTNER(a)
+        ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
+        : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
     subtext: "ניתן לבחור כמה תשובות",
     options: [
       "השקעות בשוק ההון / מניות",
@@ -98,7 +103,10 @@ const STEPS = [
   },
   {
     id: "tax_deducted",
-    question: "האם נוכה לך או לבן/ת הזוג מס בתלושי השכר ב־6 השנים האחרונות?",
+    question: (a) =>
+      HAS_PARTNER(a)
+        ? "האם נוכה לך או לבן/בת הזוג מס בתלושי השכר ב־6 השנים האחרונות?"
+        : "האם נוכה לך מס בתלושי השכר ב־6 השנים האחרונות?",
     type: "radio",
     options: ["כן", "לא", "לא יודע"],
   },
@@ -113,20 +121,7 @@ const STEPS = [
     question: "האם השכר של בן/בת הזוג מעל 8,000 ₪?",
     type: "radio",
     options: ["כן", "לא"],
-    condition: (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור",
-  },
-  {
-    id: "previous_tax_check",
-    question: "האם ביצעת בדיקת / החזר מס ב־12 החודשים האחרונים?",
-    type: "radio",
-    options: ["כן", "לא"],
-  },
-  {
-    id: "previous_tax_years",
-    question: "האם ההחזר בוצע על כל השנים או רק על חלק מהשנים?",
-    type: "radio",
-    options: ["כל השנים", "רק חלק מהשנים", "לא יודע"],
-    condition: (a) => a.previous_tax_check === "כן",
+    condition: (a) => HAS_PARTNER(a),
   },
 ];
 
@@ -145,6 +140,31 @@ const FEEDBACK_MESSAGES = [
   "מדליק! ממשיכים לבדיקה המלאה 🏆",
   "נראה מצוין! כמעט שם 🎉",
 ];
+
+// ---- Answer Labels (Hebrew) for Webhook ----
+const ANSWER_LABELS = {
+  family_status:            "מצב משפחתי",
+  age_range:                "טווח גיל",
+  employment_status:        "מצב תעסוקתי",
+  spouse_employment:        "מצב תעסוקתי של בן/בת הזוג",
+  life_events:              "אירועים ב־6 השנים האחרונות",
+  personal_circumstances:   "נסיבות אישיות",
+  financial_circumstances:  "נסיבות כלכליות",
+  tax_deducted:             "ניכוי מס בתלוש",
+  salary_over_8000:         "שכר מעל 8,000 ₪",
+  spouse_salary_over_8000:  "שכר בן/בת הזוג מעל 8,000 ₪",
+};
+
+function buildHebrewSummary() {
+  const summary = {};
+  for (const [key, label] of Object.entries(ANSWER_LABELS)) {
+    if (answers[key] !== undefined) {
+      const val = answers[key];
+      summary[label] = Array.isArray(val) ? val.join(", ") : val;
+    }
+  }
+  return summary;
+}
 
 // ---- State ----
 const answers = {};
@@ -194,6 +214,10 @@ function getRandomFeedback() {
   return FEEDBACK_MESSAGES[Math.floor(Math.random() * FEEDBACK_MESSAGES.length)];
 }
 
+function getQuestionText(step) {
+  return typeof step.question === "function" ? step.question(answers) : step.question;
+}
+
 // ---- Score Calculation ----
 function calcScore() {
   let score = 0;
@@ -224,13 +248,10 @@ function calcScore() {
 }
 
 // ---- Determine Webhook (HIGH / LOW) ----
-// HIGH  → salary_over_8000 OR spouse_salary_over_8000 OR private insurance
-// LOW   → everything else
+// HIGH → at least one person (client or partner) earns over 8,000 ₪
+// LOW  → all relevant persons earn under 8,000 ₪
 function getWebhookConfig() {
-  const financial = answers.financial_circumstances || [];
-  const hasInsurance = financial.includes("ביטוח חיים / משכנתא / בריאות פרטי");
-
-  if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן" || hasInsurance) {
+  if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן") {
     return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
   }
   return { webhookUrl: WEBHOOK_LOW, secret: WEBHOOK_LOW_SECRET };
@@ -272,7 +293,7 @@ function renderQuestion(idx) {
 
   if (step.type === "radio") {
     block.innerHTML = `
-      <p class="question-text" id="q-text-${idx}">${step.question}</p>
+      <p class="question-text" id="q-text-${idx}">${getQuestionText(step)}</p>
       <div class="answer-options" role="group" aria-labelledby="q-text-${idx}">
         ${step.options
           .map(
@@ -291,7 +312,7 @@ function renderQuestion(idx) {
     // checkbox
     const saved = answers[step.id] || [];
     block.innerHTML = `
-      <p class="question-text" id="q-text-${idx}">${step.question}</p>
+      <p class="question-text" id="q-text-${idx}">${getQuestionText(step)}</p>
       ${step.subtext ? `<p class="question-subtext">${step.subtext}</p>` : ""}
       <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
         ${step.options
@@ -351,10 +372,6 @@ function handleRadioAnswer(stepIdx, value) {
   showFeedback(getRandomFeedback());
 
   setTimeout(() => {
-    if (step.stopIf && step.stopIf(answers)) {
-      showSelfEmployedStop();
-      return;
-    }
     stepHistory.push(stepIdx);
     const next = getNextStepIndex(stepIdx);
     if (next === -1) {
@@ -508,6 +525,7 @@ leadForm.addEventListener("submit", async (e) => {
     name,
     phone,
     answers,
+    answers_hebrew: buildHebrewSummary(),
     score,
     consent: true,
     timestamp: new Date().toISOString(),
