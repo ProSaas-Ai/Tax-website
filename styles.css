@@ -836,6 +836,11 @@ body.a11y-no-anim *::after {
   background: #fff;
 }
 .answer-option-btn:disabled { cursor: default; }
+.answer-option-btn .option-emoji {
+  font-size: 1.15em;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
 
 /* Question subtext */
 .question-subtext {
@@ -873,10 +878,17 @@ body.a11y-no-anim *::after {
   flex-shrink: 0;
 }
 .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
   font-size: 0.96rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.4;
+}
+.checkbox-label .option-emoji {
+  font-size: 1.1em;
+  flex-shrink: 0;
 }
 @media (hover: hover) {
   .checkbox-option:hover {

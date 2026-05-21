@@ -18,34 +18,43 @@ const HAS_PARTNER = (a) => a.family_status === "נשוי/אה" || a.family_statu
 const STEPS = [
   {
     id: "family_status",
+    emoji: "👨‍👩‍👧‍👦",
     question: "מה המצב המשפחתי שלך?",
     type: "radio",
     options: ["רווק/ה", "נשוי/אה", "ידוע/ה בציבור", "גרוש/ה", "אלמן/ה"],
+    optionEmojis: ["😊", "💍", "🤝", "📋", "💙"],
   },
   {
     id: "age_range",
+    emoji: "🎂",
     question: (a) =>
       HAS_PARTNER(a)
         ? "מה טווח הגילאים שלך ושל בן/בת הזוג?"
         : "מה טווח הגיל שלך?",
     type: "radio",
     options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
+    optionEmojis: ["🌱", "✨", "🌟", "💫", "🍃", "🎖️"],
   },
   {
     id: "employment_status",
+    emoji: "💼",
     question: "מה המצב התעסוקתי שלך כיום?",
     type: "radio",
     options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
+    optionEmojis: ["👔", "🏢", "🔍"],
   },
   {
     id: "spouse_employment",
+    emoji: "👫",
     question: "מה המצב התעסוקתי של בן/בת הזוג כיום?",
     type: "radio",
     options: ["שכיר/ה", "עצמאי/ת", "מובטל/ת"],
+    optionEmojis: ["👔", "🏢", "🔍"],
     condition: (a) => HAS_PARTNER(a),
   },
   {
     id: "life_events",
+    emoji: "📅",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם ב־6 השנים האחרונות קרה לך או לבן/בת הזוג אחד או יותר מהדברים הבאים?"
@@ -63,10 +72,12 @@ const STEPS = [
       "תקופה ללא עבודה",
       "אף אחד מהם",
     ],
+    optionEmojis: ["🔄", "⚡", "📝", "👶", "📅", "🎖️", "🏦", "🏠", "✅"],
     noneOption: "אף אחד מהם",
   },
   {
     id: "personal_circumstances",
+    emoji: "👤",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
@@ -82,10 +93,12 @@ const STEPS = [
       "שינוי מצב משפחתי (גירושין / נישואין)",
       "אף אחד מהם",
     ],
+    optionEmojis: ["👶", "💙", "👨‍👩‍👧", "🎓", "🎖️", "📋", "✅"],
     noneOption: "אף אחד מהם",
   },
   {
     id: "financial_circumstances",
+    emoji: "💰",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
@@ -100,48 +113,73 @@ const STEPS = [
       "מכירת דירה / מגרש ותשלום מס שבח",
       "אף אחד מהם",
     ],
+    optionEmojis: ["📈", "🛡️", "🎁", "🏘️", "🏛️", "🏠", "✅"],
     type: "checkbox",
     noneOption: "אף אחד מהם",
   },
   {
     id: "tax_deducted",
+    emoji: "🧾",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם נוכה לך או לבן/בת הזוג מס בתלושי השכר ב־6 השנים האחרונות?"
         : "האם נוכה לך מס בתלושי השכר ב־6 השנים האחרונות?",
     type: "radio",
     options: ["כן", "לא", "לא יודע"],
+    optionEmojis: ["✅", "❌", "🤔"],
   },
   {
     id: "salary_over_8000",
+    emoji: "💵",
     question: "האם השכר שלך מעל 8,000 ₪ בחודש?",
     type: "radio",
     options: ["כן", "לא"],
+    optionEmojis: ["✅", "❌"],
   },
   {
     id: "spouse_salary_over_8000",
+    emoji: "💵",
     question: "האם השכר של בן/בת הזוג מעל 8,000 ₪?",
     type: "radio",
     options: ["כן", "לא"],
+    optionEmojis: ["✅", "❌"],
     condition: (a) => HAS_PARTNER(a),
   },
 ];
 
 // ---- Feedback Messages ----
 const FEEDBACK_MESSAGES = [
-  "וואו, זה נשמע מבטיח מאוד! 🔥",
   "מצוין! כל פרט מקרב אותנו לתוצאה 💪",
   "נראה שיש כאן פוטנציאל אמיתי! ✨",
   "כל הכבוד! המידע הזה ממש עוזר לנו 🎯",
   "מעולה! התמונה מתחילה להתבהר 📊",
   "נראה ממש טוב! אנחנו על הדרך הנכונה 🚀",
-  "מדהים! כל שאלה חושפת עוד פוטנציאל 💡",
-  "אחלה! כל פרט מחזק את הבדיקה שלך 💫",
-  "מצוין! נראה שזה הולך להיות מעניין 🤩",
-  "כן! זה בדיוק מה שהיינו צריכים לדעת ⚡",
-  "מדליק! ממשיכים לבדיקה המלאה 🏆",
-  "נראה מצוין! כמעט שם 🎉",
+  "כל פרט מחשף עוד פוטנציאל להחזר 💡",
+  "כל פרט מחזק את הבדיקה שלך 💫",
+  "ממשיכים – כל מידע עוזר לנו 📋",
+  "זה בדיוק מה שהיינו צריכים לדעת ⚡",
+  "ממשיכים לבדיקה המלאה 🏆",
+  "כמעט שם! 🎉",
 ];
+
+const SENSITIVE_FEEDBACK = {
+  "אלמן/ה":   ["אנחנו כאן בשבילך, ממשיכים בבדיקה 💙", "תודה על שיתוף הפרטים, נעשה הכל לסייע לך 💙"],
+  "גרוש/ה":   ["מידע חשוב לבדיקת הזכאות שלך ✅", "ממשיכים לשאלה הבאה 📋"],
+  "מובטל/ת":  ["כל מידע מקדם אותנו לתוצאה טובה 💪", "ממשיכים, כל פרט חשוב לבדיקה 📊"],
+  'אבטלה / חל"ת': ["כל פרט עוזר לנו בבדיקה המקיפה 📋", "ממשיכים, המידע מתקבל ✅"],
+};
+
+function getFeedback(value) {
+  if (value && SENSITIVE_FEEDBACK[value]) {
+    const msgs = SENSITIVE_FEEDBACK[value];
+    return msgs[Math.floor(Math.random() * msgs.length)];
+  }
+  return FEEDBACK_MESSAGES[Math.floor(Math.random() * FEEDBACK_MESSAGES.length)];
+}
+
+function getRandomFeedback() {
+  return FEEDBACK_MESSAGES[Math.floor(Math.random() * FEEDBACK_MESSAGES.length)];
+}
 
 // ---- Answer Labels (Hebrew) for Webhook ----
 const ANSWER_LABELS = {
@@ -217,7 +255,8 @@ function getRandomFeedback() {
 }
 
 function getQuestionText(step) {
-  return typeof step.question === "function" ? step.question(answers) : step.question;
+  const text = typeof step.question === "function" ? step.question(answers) : step.question;
+  return step.emoji ? `${step.emoji} ${text}` : text;
 }
 
 // ---- Score Calculation ----
@@ -313,8 +352,10 @@ function renderQuestion(idx) {
       <div class="answer-options" role="group" aria-labelledby="q-text-${idx}">
         ${step.options
           .map(
-            (opt) => `
-          <button class="answer-option-btn" data-value="${opt}" aria-label="${opt}">${opt}</button>
+            (opt, i) => `
+          <button class="answer-option-btn" data-value="${opt}" aria-label="${opt}">
+            ${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${opt}
+          </button>
         `
           )
           .join("")}
@@ -333,10 +374,10 @@ function renderQuestion(idx) {
       <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
         ${step.options
           .map(
-            (opt) => `
+            (opt, i) => `
           <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}">
             <input type="checkbox" value="${opt}"${saved.includes(opt) ? " checked" : ""} />
-            <span class="checkbox-label">${opt}</span>
+            <span class="checkbox-label">${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${opt}</span>
           </label>
         `
           )
@@ -385,7 +426,7 @@ function handleRadioAnswer(stepIdx, value) {
   });
 
   answers[step.id] = value;
-  showFeedback(getRandomFeedback());
+  showFeedback(getFeedback(value));
 
   setTimeout(() => {
     stepHistory.push(stepIdx);
@@ -461,10 +502,13 @@ function showFormStep() {
   formStep.style.display = "block";
   formStep.removeAttribute("aria-hidden");
 
+  const section = document.getElementById("questionnaire");
+  if (section) section.scrollIntoView({ behavior: "smooth", block: "start" });
+
   const heading = formStep.querySelector(".quiz-title");
   if (heading) {
     heading.setAttribute("tabindex", "-1");
-    heading.focus();
+    setTimeout(() => heading.focus(), 400);
   }
 }
 
