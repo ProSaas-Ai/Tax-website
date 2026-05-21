@@ -5,10 +5,12 @@
 "use strict";
 
 // ---- Webhook URLs & Secrets ----
-const WEBHOOK_HIGH        = "https://prosaas.pro/api/webhook/leads/11";
-const WEBHOOK_HIGH_SECRET = "wh_ATHHsbMsQ-6zLWe1HYn5TWJ7bDGnA4CO1qOSAQxBUHU";
-const WEBHOOK_LOW         = "https://prosaas.pro/api/webhook/leads/12";
-const WEBHOOK_LOW_SECRET  = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
+const WEBHOOK_INDEPENDENT        = "https://prosaas.pro/api/webhook/leads/10";
+const WEBHOOK_INDEPENDENT_SECRET = "wh_Wp0yoPDpsDUrZWoP7ASta0MNE-56OveSy8rsx3jN0BI";
+const WEBHOOK_HIGH               = "https://prosaas.pro/api/webhook/leads/11";
+const WEBHOOK_HIGH_SECRET        = "wh_ATHHsbMsQ-6zLWe1HYn5TWJ7bDGnA4CO1qOSAQxBUHU";
+const WEBHOOK_LOW                = "https://prosaas.pro/api/webhook/leads/12";
+const WEBHOOK_LOW_SECRET         = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
 
 // ---- Steps ----
 const HAS_PARTNER = (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור";
@@ -247,10 +249,24 @@ function calcScore() {
   return score;
 }
 
-// ---- Determine Webhook (HIGH / LOW) ----
-// HIGH → at least one person (client or partner) earns over 8,000 ₪
-// LOW  → all relevant persons earn under 8,000 ₪
+// ---- Determine Webhook (INDEPENDENT / HIGH / LOW) ----
+// INDEPENDENT → self-employed client (and partner if applicable, both must be self-employed)
+// HIGH        → at least one person earns over 8,000 ₪
+// LOW         → all relevant persons earn under 8,000 ₪
 function getWebhookConfig() {
+  const clientSelfEmployed = answers.employment_status === "עצמאי/ת";
+  const spouseSelfEmployed = answers.spouse_employment === "עצמאי/ת";
+
+  if (!HAS_PARTNER(answers)) {
+    if (clientSelfEmployed) {
+      return { webhookUrl: WEBHOOK_INDEPENDENT, secret: WEBHOOK_INDEPENDENT_SECRET };
+    }
+  } else {
+    if (clientSelfEmployed && spouseSelfEmployed) {
+      return { webhookUrl: WEBHOOK_INDEPENDENT, secret: WEBHOOK_INDEPENDENT_SECRET };
+    }
+  }
+
   if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן") {
     return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
   }
