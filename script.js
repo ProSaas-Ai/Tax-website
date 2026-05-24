@@ -305,13 +305,21 @@ function calcScore() {
 function getWebhookConfig() {
   const clientSelfEmployed = answers.employment_status === "עצמאי/ת";
   const spouseSelfEmployed = answers.spouse_employment === "עצמאי/ת";
+  const financial = answers.financial_circumstances || [];
+  const hasInsuranceOption = financial.includes("ביטוח חיים / משכנתא / בריאות פרטי");
 
   if (!HAS_PARTNER(answers)) {
     if (clientSelfEmployed) {
+      if (hasInsuranceOption) {
+        return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
+      }
       return { webhookUrl: WEBHOOK_INDEPENDENT, secret: WEBHOOK_INDEPENDENT_SECRET };
     }
   } else {
     if (clientSelfEmployed && spouseSelfEmployed) {
+      if (hasInsuranceOption) {
+        return { webhookUrl: WEBHOOK_HIGH, secret: WEBHOOK_HIGH_SECRET };
+      }
       return { webhookUrl: WEBHOOK_INDEPENDENT, secret: WEBHOOK_INDEPENDENT_SECRET };
     }
   }
