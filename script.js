@@ -480,17 +480,8 @@ function handleCheckboxAnswer(stepIdx) {
     (cb) => cb.value
   );
 
-  if (checked.length === 0) {
-    let hint = questionArea.querySelector(".checkbox-hint");
-    if (!hint) {
-      hint = document.createElement("p");
-      hint.className = "checkbox-hint";
-      hint.textContent = "נא לבחור לפחות תשובה אחת";
-      const continueBtn = questionArea.querySelector("#btn-continue");
-      continueBtn.insertAdjacentElement("beforebegin", hint);
-    }
-    return;
-  }
+  const hint = questionArea.querySelector(".checkbox-hint");
+  if (hint) hint.remove();
 
   answers[step.id] = checked;
   const continueBtn = questionArea.querySelector("#btn-continue");
