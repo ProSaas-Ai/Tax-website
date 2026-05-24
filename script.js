@@ -53,6 +53,23 @@ const STEPS = [
     condition: (a) => HAS_PARTNER(a),
   },
   {
+    id: "salary_over_8000",
+    emoji: "💵",
+    question: "האם השכר שלך מעל 8,000 ₪ בחודש?",
+    type: "radio",
+    options: ["כן", "לא"],
+    optionEmojis: ["✅", "❌"],
+  },
+  {
+    id: "spouse_salary_over_8000",
+    emoji: "💵",
+    question: "האם השכר של בן/בת הזוג מעל 8,000 ₪?",
+    type: "radio",
+    options: ["כן", "לא"],
+    optionEmojis: ["✅", "❌"],
+    condition: (a) => HAS_PARTNER(a),
+  },
+  {
     id: "life_events",
     emoji: "📅",
     sectionTitle: "מסך 1 – אירועי חיים",
@@ -140,42 +157,6 @@ const STEPS = [
     ],
     type: "checkbox",
   },
-  {
-    id: "tax_deducted",
-    emoji: "🧾",
-    question: (a) =>
-      HAS_PARTNER(a)
-        ? "האם נוכה לך או לבן/בת הזוג מס בתלושי השכר ב־6 השנים האחרונות?"
-        : "האם נוכה לך מס בתלושי השכר ב־6 השנים האחרונות?",
-    type: "radio",
-    options: ["כן", "לא", "לא יודע"],
-    optionEmojis: ["✅", "❌", "🤔"],
-  },
-  {
-    id: "tax_refund_recent",
-    emoji: "🔍",
-    question: "האם ביצעת בדיקת/החזר מס ב־12 החודשים האחרונים?",
-    type: "radio",
-    options: ["כן", "לא", "לא יודע"],
-    optionEmojis: ["✅", "❌", "🤔"],
-  },
-  {
-    id: "salary_over_8000",
-    emoji: "💵",
-    question: "האם השכר שלך מעל 8,000 ₪ בחודש?",
-    type: "radio",
-    options: ["כן", "לא"],
-    optionEmojis: ["✅", "❌"],
-  },
-  {
-    id: "spouse_salary_over_8000",
-    emoji: "💵",
-    question: "האם השכר של בן/בת הזוג מעל 8,000 ₪?",
-    type: "radio",
-    options: ["כן", "לא"],
-    optionEmojis: ["✅", "❌"],
-    condition: (a) => HAS_PARTNER(a),
-  },
 ];
 
 // ---- Feedback Messages ----
@@ -221,8 +202,6 @@ const ANSWER_LABELS = {
   life_events:              "אירועים ב־6 השנים האחרונות",
   personal_circumstances:   "נסיבות אישיות",
   financial_circumstances:  "נסיבות כלכליות",
-  tax_deducted:             "ניכוי מס בתלוש",
-  tax_refund_recent:        "בדיקת/החזר מס ב-12 חודשים אחרונים",
   salary_over_8000:         "שכר מעל 8,000 ₪",
   spouse_salary_over_8000:  "שכר בן/בת הזוג מעל 8,000 ₪",
 };
@@ -295,7 +274,6 @@ function getQuestionText(step) {
 function calcScore() {
   let score = 0;
   if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן") score += 3;
-  if (answers.tax_deducted === "כן") score += 2;
 
   const life = answers.life_events || [];
   if (life.includes("החלפת עבודה")) score += 1;
@@ -480,17 +458,8 @@ function handleCheckboxAnswer(stepIdx) {
     (cb) => cb.value
   );
 
-  if (checked.length === 0) {
-    let hint = questionArea.querySelector(".checkbox-hint");
-    if (!hint) {
-      hint = document.createElement("p");
-      hint.className = "checkbox-hint";
-      hint.textContent = "נא לבחור לפחות תשובה אחת";
-      const continueBtn = questionArea.querySelector("#btn-continue");
-      continueBtn.insertAdjacentElement("beforebegin", hint);
-    }
-    return;
-  }
+  const hint = questionArea.querySelector(".checkbox-hint");
+  if (hint) hint.remove();
 
   answers[step.id] = checked;
   const continueBtn = questionArea.querySelector("#btn-continue");
