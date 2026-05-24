@@ -55,11 +55,12 @@ const STEPS = [
   {
     id: "life_events",
     emoji: "📅",
+    sectionTitle: "מסך 1 – אירועי חיים",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם ב־6 השנים האחרונות קרה לך או לבן/בת הזוג אחד או יותר מהדברים הבאים?"
         : "האם ב־6 השנים האחרונות קרה לך אחד או יותר מהדברים הבאים?",
-    subtext: "ניתן לבחור כמה תשובות",
+    subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
     type: "checkbox",
     options: [
       "החלפת עבודה",
@@ -70,19 +71,28 @@ const STEPS = [
       "מילואים",
       "משיכת פנסיה / קרן השתלמות עם מס",
       "תקופה ללא עבודה",
-      "אף אחד מהם",
     ],
-    optionEmojis: ["🔄", "⚡", "📝", "👶", "📅", "🎖️", "🏦", "🏠", "✅"],
-    noneOption: "אף אחד מהם",
+    optionEmojis: ["🔄", "⚡", "📝", "👶", "📅", "🎖️", "🏦", "🏠"],
+    optionDescriptions: [
+      "מעבר בין מעסיקים עלול ליצור ניכוי מס עודף",
+      "עבודה אצל שני מעסיקים בו-זמנית מחייבת תיאום מס",
+      "ללא תיאום מס כל מעסיק מנכה מס באופן עצמאי – לרוב גורם לתשלום יתר",
+      "בתקופת חופשת לידה ניכויי המס עשויים להיות גבוהים ממה שנדרש",
+      "בתקופת אבטלה ניתן לעתים לקבל החזר על מס שנוכה בשנה",
+      "גמל מילואים פטור ממס ויש לו השפעה על חישוב ההחזר",
+      "משיכה מוקדמת כרוכה בניכוי מס במקור – ניתן לבדוק השבה",
+      "תקופה ללא הכנסה מפחיתה את חבות המס השנתית",
+    ],
   },
   {
     id: "personal_circumstances",
     emoji: "👤",
+    sectionTitle: "מסך 2 – משפחה וזכויות",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
         : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
-    subtext: "ניתן לבחור כמה תשובות",
+    subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
     type: "checkbox",
     options: [
       "ילדים מתחת לגיל 18",
@@ -91,19 +101,26 @@ const STEPS = [
       "סיום תואר / לימודי מקצוע",
       "חייל משוחרר",
       "שינוי מצב משפחתי (גירושין / נישואין)",
-      "אף אחד מהם",
     ],
-    optionEmojis: ["👶", "💙", "👨‍👩‍👧", "🎓", "🎖️", "📋", "✅"],
-    noneOption: "אף אחד מהם",
+    optionEmojis: ["👶", "💙", "👨‍👩‍👧", "🎓", "🎖️", "📋"],
+    optionDescriptions: [
+      "נקודות זיכוי מס על כל ילד מתחת לגיל 18",
+      "נקודות זיכוי מיוחדות בגין מוגבלות, קצבת ביטוח לאומי או ועדת זכאות",
+      "הוצאות מזונות מוכרות כניכוי לצרכי מס",
+      "נקודת זיכוי נוספת עבור תואר אקדמי או לימודי מקצוע שהושלמו",
+      "נקודות זיכוי מיוחדות לשנים שלאחר השחרור מהצבא",
+      "שינוי מצב אישי משפיע על חישוב נקודות הזיכוי שלך",
+    ],
   },
   {
     id: "financial_circumstances",
     emoji: "💰",
+    sectionTitle: "מסך 3 – כספים, ביטוחים והשקעות",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
         : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
-    subtext: "ניתן לבחור כמה תשובות",
+    subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
     options: [
       "השקעות בשוק ההון / מניות",
       "ביטוח חיים / משכנתא / בריאות פרטי",
@@ -111,11 +128,17 @@ const STEPS = [
       "מגורים ביישוב מזכה",
       "עבודה ממשלתית / עירייה / גוף ציבורי",
       "מכירת דירה / מגרש ותשלום מס שבח",
-      "אף אחד מהם",
     ],
-    optionEmojis: ["📈", "🛡️", "🎁", "🏘️", "🏛️", "🏠", "✅"],
+    optionEmojis: ["📈", "🛡️", "🎁", "🏘️", "🏛️", "🏠"],
+    optionDescriptions: [
+      "ניתן לקזז הפסדים בשוק ההון ולהפחית את חבות המס על רווחי הון",
+      "זיכוי מס על פרמיות ביטוח חיים, ריבית משכנתא וביטוח בריאות פרטי",
+      "זיכוי מס של 35% על תרומות לגופים מוכרים (בצירוף קבלה)",
+      "נקודות זיכוי נוספות לתושבי יישובים בפריפריה ואזורים מועדפים",
+      "מאפייני שכר ייחודיים לעובדי מדינה, עירייה וגופים ציבוריים",
+      "ייתכן זיכוי כנגד מסים ששולמו על מכירת נכסי מקרקעין",
+    ],
     type: "checkbox",
-    noneOption: "אף אחד מהם",
   },
   {
     id: "tax_deducted",
@@ -124,6 +147,14 @@ const STEPS = [
       HAS_PARTNER(a)
         ? "האם נוכה לך או לבן/בת הזוג מס בתלושי השכר ב־6 השנים האחרונות?"
         : "האם נוכה לך מס בתלושי השכר ב־6 השנים האחרונות?",
+    type: "radio",
+    options: ["כן", "לא", "לא יודע"],
+    optionEmojis: ["✅", "❌", "🤔"],
+  },
+  {
+    id: "tax_refund_recent",
+    emoji: "🔍",
+    question: "האם ביצעת בדיקת/החזר מס ב־12 החודשים האחרונים?",
     type: "radio",
     options: ["כן", "לא", "לא יודע"],
     optionEmojis: ["✅", "❌", "🤔"],
@@ -191,6 +222,7 @@ const ANSWER_LABELS = {
   personal_circumstances:   "נסיבות אישיות",
   financial_circumstances:  "נסיבות כלכליות",
   tax_deducted:             "ניכוי מס בתלוש",
+  tax_refund_recent:        "בדיקת/החזר מס ב-12 חודשים אחרונים",
   salary_over_8000:         "שכר מעל 8,000 ₪",
   spouse_salary_over_8000:  "שכר בן/בת הזוג מעל 8,000 ₪",
 };
@@ -369,15 +401,16 @@ function renderQuestion(idx) {
     // checkbox
     const saved = answers[step.id] || [];
     block.innerHTML = `
+      ${step.sectionTitle ? `<div class="section-screen-title">${step.sectionTitle}</div>` : ""}
       <p class="question-text" id="q-text-${idx}">${getQuestionText(step)}</p>
       ${step.subtext ? `<p class="question-subtext">${step.subtext}</p>` : ""}
       <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
         ${step.options
           .map(
             (opt, i) => `
-          <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}">
+          <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}${step.optionDescriptions ? " has-desc" : ""}">
             <input type="checkbox" value="${opt}"${saved.includes(opt) ? " checked" : ""} />
-            <span class="checkbox-label">${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${opt}</span>
+            <span class="checkbox-label">${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${step.optionDescriptions ? `<span class="option-text"><span class="option-title">${opt}</span><span class="option-desc">${step.optionDescriptions[i]}</span></span>` : opt}</span>
           </label>
         `
           )
