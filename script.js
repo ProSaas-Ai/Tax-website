@@ -5,12 +5,12 @@
 "use strict";
 
 // ---- Webhook URLs & Secrets ----
-const WEBHOOK_INDEPENDENT        = "https://prosaas.pro/api/webhook/leads/10";
-const WEBHOOK_INDEPENDENT_SECRET = "wh_Wp0yoPDpsDUrZWoP7ASta0MNE-56OveSy8rsx3jN0BI";
-const WEBHOOK_HIGH               = "https://prosaas.pro/api/webhook/leads/11";
-const WEBHOOK_HIGH_SECRET        = "wh_ATHHsbMsQ-6zLWe1HYn5TWJ7bDGnA4CO1qOSAQxBUHU";
-const WEBHOOK_LOW                = "https://prosaas.pro/api/webhook/leads/12";
-const WEBHOOK_LOW_SECRET         = "wh_zRhXaSIdGiR-G2DX5rDWlWrXQ1nx7GbRYUspBsMSC4s";
+const WEBHOOK_INDEPENDENT        = "https://prosaas.pro/api/webhook/leads/14";
+const WEBHOOK_INDEPENDENT_SECRET = "wh_M9etL3KrCbvCrD4QhFveU6XrPl6Lu1LIS9GQ1rLu5k0";
+const WEBHOOK_HIGH               = "https://prosaas.pro/api/webhook/leads/7";
+const WEBHOOK_HIGH_SECRET        = "wh_c56bNZmrou9srMqfqRxttZQzyi_CQ2NrYEWmz-54Bgk";
+const WEBHOOK_LOW                = "https://prosaas.pro/api/webhook/leads/6";
+const WEBHOOK_LOW_SECRET         = "wh_RqCEekRLnRDcYvzmMh9EpR6m6r51oym7g7a8gWDates";
 
 // ---- Steps ----
 const HAS_PARTNER = (a) => a.family_status === "נשוי/אה" || a.family_status === "ידוע/ה בציבור";
