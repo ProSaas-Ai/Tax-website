@@ -952,6 +952,51 @@ body.a11y-no-anim *::after {
   .option-desc  { font-size: 0.72rem; }
 }
 
+/* ---- Grouped checkbox layout (all_circumstances) ---- */
+.checkbox-all-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.checkbox-group-header {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--gov-blue);
+  background: var(--gov-blue-light);
+  border: 1px solid rgba(0,56,168,0.18);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  margin-bottom: 6px;
+  letter-spacing: 0.03em;
+  display: inline-block;
+}
+
+.checkbox-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.checkbox-options-grid .checkbox-option {
+  padding: 9px 11px;
+}
+
+.checkbox-options-grid .option-title {
+  font-size: 0.87rem;
+}
+
+.checkbox-options-grid .option-desc {
+  font-size: 0.69rem;
+}
+
+@media (max-width: 520px) {
+  .checkbox-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Continue button */
 .btn-continue {
   width: 100%;
