@@ -25,17 +25,6 @@ const STEPS = [
     optionEmojis: ["😊", "💍", "🤝", "👤", "💙"],
   },
   {
-    id: "age_range",
-    emoji: "🎂",
-    question: (a) =>
-      HAS_PARTNER(a)
-        ? "מה טווח הגילאים שלך ושל בן/בת הזוג?"
-        : "מה טווח הגיל שלך?",
-    type: "radio",
-    options: ["18–25", "26–35", "36–45", "46–55", "56–67", "67+"],
-    optionEmojis: ["🌱", "✨", "🌟", "💫", "🍃", "🎖️"],
-  },
-  {
     id: "employment_status",
     emoji: "💼",
     question: "מה המצב התעסוקתי שלך כיום?",
@@ -70,91 +59,45 @@ const STEPS = [
     condition: (a) => HAS_PARTNER(a),
   },
   {
-    id: "financial_circumstances",
-    emoji: "💰",
-    sectionTitle: "מסך 1 – כספים, ביטוחים והשקעות",
+    id: "all_circumstances",
+    emoji: "📋",
     question: (a) =>
       HAS_PARTNER(a)
         ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
         : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
     subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
+    type: "checkbox",
+    groups: [
+      { title: "💰 כספים, ביטוחים והשקעות", count: 5 },
+      { title: "📅 אירועי חיים",             count: 2 },
+      { title: "👤 משפחה וזכויות",            count: 4 },
+    ],
     options: [
       "השקעות בשוק ההון / מניות",
       "תשלום עבור - ביטוח חיים/ משכנתא/ בריאות פרטי",
       "תרומות עם קבלות",
       "מגורים ביישוב מזכה",
-      "עבודה ממשלתית / עירייה / גוף ציבורי",
       "מכירת דירה / מגרש ותשלום מס שבח",
+      'החלפת עבודה / עבודה ב-2 מקומות / חופשת לידה / אבטלה / חל"ת / מילואים / תקופה ללא עבודה / חייל/ת משוחרר/ת',
+      "משיכת פנסיה / קרן השתלמות עם מס",
+      "ילדים מתחת לגיל 18",
+      "ילד עם לקות למידה / קצבה / ועדת זכאות",
+      "תשלום מזונות",
+      "סיום תואר / לימודי מקצוע",
     ],
-    optionEmojis: ["📈", "🛡️", "🎁", "🏘️", "🏛️", "🏠"],
+    optionEmojis: ["📈", "🛡️", "🎁", "🏘️", "🏠", "🔄", "🏦", "👶", "💙", "👨‍👩‍👧", "🎓"],
     optionDescriptions: [
       "ניתן לקזז הפסדים בשוק ההון ולהפחית את חבות המס על רווחי הון",
       "זיכוי מס על פרמיות ביטוח חיים, ריבית משכנתא וביטוח בריאות פרטי",
       "זיכוי מס של 35% על תרומות לגופים מוכרים (בצירוף קבלה)",
       "נקודות זיכוי נוספות לתושבי יישובים בפריפריה ואזורים מועדפים",
-      "מאפייני שכר ייחודיים לעובדי מדינה, עירייה וגופים ציבוריים",
       "ייתכן זיכוי כנגד מסים ששולמו על מכירת נכסי מקרקעין",
-    ],
-    type: "checkbox",
-  },
-  {
-    id: "life_events",
-    emoji: "📅",
-    sectionTitle: "מסך 2 – אירועי חיים",
-    question: (a) =>
-      HAS_PARTNER(a)
-        ? "האם ב־6 השנים האחרונות קרה לך או לבן/בת הזוג אחד או יותר מהדברים הבאים?"
-        : "האם ב־6 השנים האחרונות קרה לך אחד או יותר מהדברים הבאים?",
-    subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
-    type: "checkbox",
-    options: [
-      "החלפת עבודה",
-      "עבודה ב־2 מקומות במקביל",
-      "לא עשיתי תיאום מס",
-      "חופשת לידה",
-      'אבטלה / חל"ת',
-      "מילואים",
-      "משיכת פנסיה / קרן השתלמות עם מס",
-      "תקופה ללא עבודה",
-    ],
-    optionEmojis: ["🔄", "⚡", "📝", "👶", "📅", "🎖️", "🏦", "🏠"],
-    optionDescriptions: [
-      "מעבר בין מעסיקים עלול ליצור ניכוי מס עודף",
-      "עבודה אצל שני מעסיקים בו-זמנית מחייבת תיאום מס",
-      "ללא תיאום מס כל מעסיק מנכה מס באופן עצמאי – לרוב גורם לתשלום יתר",
-      "בתקופת חופשת לידה ניכויי המס עשויים להיות גבוהים ממה שנדרש",
-      "בתקופת אבטלה ניתן לעתים לקבל החזר על מס שנוכה בשנה",
-      "גמל מילואים פטור ממס ויש לו השפעה על חישוב ההחזר",
+      'החלפת/ריבוי מעסיקים, חופשת לידה, אבטלה, מילואים ושחרור מהצבא עשויים ליצור ניכוי מס עודף',
       "משיכה מוקדמת כרוכה בניכוי מס במקור – ניתן לבדוק השבה",
-      "תקופה ללא הכנסה מפחיתה את חבות המס השנתית",
-    ],
-  },
-  {
-    id: "personal_circumstances",
-    emoji: "👤",
-    sectionTitle: "מסך 3 – משפחה וזכויות",
-    question: (a) =>
-      HAS_PARTNER(a)
-        ? "האם אחד או יותר מהדברים הבאים רלוונטיים אליך או לבן/בת הזוג?"
-        : "האם אחד או יותר מהדברים הבאים רלוונטיים אליך?",
-    subtext: "ניתן לסמן כמה אפשרויות – כל אחת עשויה להגדיל את ההחזר שלך",
-    type: "checkbox",
-    options: [
-      "ילדים מתחת לגיל 18",
-      "ילד עם לקות למידה / קצבה / ועדת זכאות",
-      "תשלום מזונות",
-      "סיום תואר / לימודי מקצוע",
-      "חייל משוחרר",
-      "שינוי מצב משפחתי (גירושין / נישואין)",
-    ],
-    optionEmojis: ["👶", "💙", "👨‍👩‍👧", "🎓", "🎖️", "📋"],
-    optionDescriptions: [
       "נקודות זיכוי מס על כל ילד מתחת לגיל 18",
       "נקודות זיכוי מיוחדות בגין מוגבלות, קצבת ביטוח לאומי או ועדת זכאות",
       "הוצאות מזונות מוכרות כניכוי לצרכי מס",
       "נקודת זיכוי נוספת עבור תואר אקדמי או לימודי מקצוע שהושלמו",
-      "נקודות זיכוי מיוחדות לשנים שלאחר השחרור מהצבא",
-      "שינוי מצב אישי משפיע על חישוב נקודות הזיכוי שלך",
     ],
   },
 ];
@@ -195,15 +138,12 @@ function getRandomFeedback() {
 
 // ---- Answer Labels (Hebrew) for Webhook ----
 const ANSWER_LABELS = {
-  family_status:            "מצב משפחתי",
-  age_range:                "טווח גיל",
-  employment_status:        "מצב תעסוקתי",
-  spouse_employment:        "מצב תעסוקתי של בן/בת הזוג",
-  life_events:              "אירועים ב־6 השנים האחרונות",
-  personal_circumstances:   "נסיבות אישיות",
-  financial_circumstances:  "נסיבות כלכליות",
-  salary_over_8000:         "שכר מעל 8,000 ₪",
-  spouse_salary_over_8000:  "שכר בן/בת הזוג מעל 8,000 ₪",
+  family_status:           "מצב משפחתי",
+  employment_status:       "מצב תעסוקתי",
+  spouse_employment:       "מצב תעסוקתי של בן/בת הזוג",
+  salary_over_8000:        "שכר מעל 8,000 ₪",
+  spouse_salary_over_8000: "שכר בן/בת הזוג מעל 8,000 ₪",
+  all_circumstances:       "זכויות ונסיבות",
 };
 
 function buildHebrewSummary() {
@@ -275,25 +215,18 @@ function calcScore() {
   let score = 0;
   if (answers.salary_over_8000 === "כן" || answers.spouse_salary_over_8000 === "כן") score += 3;
 
-  const life = answers.life_events || [];
-  if (life.includes("החלפת עבודה")) score += 1;
-  if (life.includes("עבודה ב־2 מקומות במקביל")) score += 1;
-  if (life.includes("לא עשיתי תיאום מס")) score += 1;
-  if (life.includes("חופשת לידה")) score += 1;
-  if (life.includes("משיכת פנסיה / קרן השתלמות עם מס")) score += 1;
-
-  const personal = answers.personal_circumstances || [];
-  if (personal.includes("ילדים מתחת לגיל 18")) score += 1;
-  if (personal.includes("ילד עם לקות למידה / קצבה / ועדת זכאות")) score += 1;
-  if (personal.includes("חייל משוחרר")) score += 1;
-  if (personal.includes("סיום תואר / לימודי מקצוע")) score += 1;
-
-  const financial = answers.financial_circumstances || [];
-  if (financial.includes("ביטוח חיים / משכנתא / בריאות פרטי")) score += 1;
-  if (financial.includes("תרומות עם קבלות")) score += 1;
-  if (financial.includes("השקעות בשוק ההון / מניות")) score += 1;
-  if (financial.includes("מכירת דירה / מגרש ותשלום מס שבח")) score += 1;
-  if (financial.includes("מגורים ביישוב מזכה")) score += 1;
+  const all = answers.all_circumstances || [];
+  if (all.includes("השקעות בשוק ההון / מניות")) score += 1;
+  if (all.includes("תשלום עבור - ביטוח חיים/ משכנתא/ בריאות פרטי")) score += 1;
+  if (all.includes("תרומות עם קבלות")) score += 1;
+  if (all.includes("מגורים ביישוב מזכה")) score += 1;
+  if (all.includes("מכירת דירה / מגרש ותשלום מס שבח")) score += 1;
+  if (all.some((v) => v.startsWith("החלפת עבודה"))) score += 1;
+  if (all.includes("משיכת פנסיה / קרן השתלמות עם מס")) score += 1;
+  if (all.includes("ילדים מתחת לגיל 18")) score += 1;
+  if (all.includes("ילד עם לקות למידה / קצבה / ועדת זכאות")) score += 1;
+  if (all.includes("תשלום מזונות")) score += 1;
+  if (all.includes("סיום תואר / לימודי מקצוע")) score += 1;
 
   return score;
 }
@@ -305,8 +238,8 @@ function calcScore() {
 function getWebhookConfig() {
   const clientSelfEmployed = answers.employment_status === "עצמאי/ת";
   const spouseSelfEmployed = answers.spouse_employment === "עצמאי/ת";
-  const financial = answers.financial_circumstances || [];
-  const hasInsuranceOption = financial.includes("ביטוח חיים / משכנתא / בריאות פרטי");
+  const all = answers.all_circumstances || [];
+  const hasInsuranceOption = all.includes("תשלום עבור - ביטוח חיים/ משכנתא/ בריאות פרטי");
 
   if (!HAS_PARTNER(answers)) {
     if (clientSelfEmployed) {
@@ -386,22 +319,43 @@ function renderQuestion(idx) {
   } else {
     // checkbox
     const saved = answers[step.id] || [];
+
+    let checkboxListHtml;
+    if (step.groups) {
+      let optIdx = 0;
+      const groupsHtml = step.groups.map((group) => {
+        let itemsHtml = "";
+        for (let gi = 0; gi < group.count; gi++) {
+          const opt  = step.options[optIdx];
+          const emoji = step.optionEmojis ? step.optionEmojis[optIdx] : null;
+          const desc  = step.optionDescriptions ? step.optionDescriptions[optIdx] : null;
+          const sel   = saved.includes(opt);
+          itemsHtml += `
+            <label class="checkbox-option${sel ? " selected" : ""}${desc ? " has-desc" : ""}">
+              <input type="checkbox" value="${opt}"${sel ? " checked" : ""} />
+              <span class="checkbox-label">${emoji ? `<span class="option-emoji" aria-hidden="true">${emoji}</span>` : ""}${desc ? `<span class="option-text"><span class="option-title">${opt}</span><span class="option-desc">${desc}</span></span>` : opt}</span>
+            </label>`;
+          optIdx++;
+        }
+        return `<div class="checkbox-group"><div class="checkbox-group-header">${group.title}</div><div class="checkbox-options checkbox-options-grid">${itemsHtml}</div></div>`;
+      }).join("");
+      checkboxListHtml = `<div class="checkbox-all-groups" role="group" aria-labelledby="q-text-${idx}">${groupsHtml}</div>`;
+    } else {
+      checkboxListHtml = `
+        <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
+          ${step.options.map((opt, i) => `
+            <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}${step.optionDescriptions ? " has-desc" : ""}">
+              <input type="checkbox" value="${opt}"${saved.includes(opt) ? " checked" : ""} />
+              <span class="checkbox-label">${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${step.optionDescriptions ? `<span class="option-text"><span class="option-title">${opt}</span><span class="option-desc">${step.optionDescriptions[i]}</span></span>` : opt}</span>
+            </label>`).join("")}
+        </div>`;
+    }
+
     block.innerHTML = `
       ${step.sectionTitle ? `<div class="section-screen-title">${step.sectionTitle}</div>` : ""}
       <p class="question-text" id="q-text-${idx}">${getQuestionText(step)}</p>
       ${step.subtext ? `<p class="question-subtext">${step.subtext}</p>` : ""}
-      <div class="checkbox-options" role="group" aria-labelledby="q-text-${idx}">
-        ${step.options
-          .map(
-            (opt, i) => `
-          <label class="checkbox-option${saved.includes(opt) ? " selected" : ""}${step.optionDescriptions ? " has-desc" : ""}">
-            <input type="checkbox" value="${opt}"${saved.includes(opt) ? " checked" : ""} />
-            <span class="checkbox-label">${step.optionEmojis ? `<span class="option-emoji" aria-hidden="true">${step.optionEmojis[i]}</span>` : ""}${step.optionDescriptions ? `<span class="option-text"><span class="option-title">${opt}</span><span class="option-desc">${step.optionDescriptions[i]}</span></span>` : opt}</span>
-          </label>
-        `
-          )
-          .join("")}
-      </div>
+      ${checkboxListHtml}
       <button class="btn btn-primary btn-continue" id="btn-continue">המשך ←</button>
     `;
     questionArea.appendChild(block);
